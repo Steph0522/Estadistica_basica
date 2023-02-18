@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introducción a la estadística</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dra. Stephanie Hereira Pacheco" />
+    <script src="Clase1_files/header-attrs-2.18/header-attrs.js"></script>
+    <script src="Clase1_files/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="Clase1_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="Clase1_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"Press Ctrl+C to Copy"})</script>
+    <link href="Clase1_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="Clase1_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <script src="Clase1_files/kePrint-0.0.1/kePrint.js"></script>
+    <link href="Clase1_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Introducción a la estadística
+]
+.author[
+### Dra. Stephanie Hereira Pacheco
+]
+.institute[
+### CTCB, UATx
+]
+.date[
+### 23-02-2023
+]
+
+---
+
+remotes::install_github("rstudio-education/armcompanion")
+
+
+
+
+
+
+.pull-left[
+.center-left[
+&lt;img src="https://ctbcuatx.edu.mx/wp-content/uploads/2020/07/1617710_1048843451811700_2278987052727773097_o-1920x805.jpg" width="600" height="200" /&gt;
+]]
+.pull-right[
+!["](https://upload.wikimedia.org/wikipedia/commons/a/a6/Logotipo_de_la_CONACYT.png)]
+---
+
+# Contenido
+
++ Pruebas paramétricas y supuestos estadísticos.
+
+    - t de student
+
++ Pruebas no paramétricas y supuestos estadísticos.
+
+    - U de Mann Whitney
+
+    - Prueba de Wilcoxon.
+    
+    
+---
+## Pruebas paramétricas y supuestos estadísticos
+
+Se conoce como estadística paramétrica a aquella que se basa en el muestreo de una población con una distribución conocida y con  parámetros fijos. 
+
+Los supuestos de las pruebas paramétricas en general son:
+
+- Distribución conocida (**normal**): visual y pruebas numéricas.
+
+- Homocedasticidad: visual y pruebas numéricas.
+
+- Otros: tamaño de la muestra, variables cuantitativas o continuas, outliers, aleatoriedad, independencia de las observaciones, linealidad. 
+
+.
+
+.center[*** Cada tipo de prueba paramétrica tiene sus propios supuestos***]
+---
+
+### Distribución normal: métodos visuales
+
+.pull-left[
+
+
+
+```r
+data_normal&lt;- rnorm(200)
+hist(data_normal, col='steelblue', main='Normal')
+```
+
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+]
+.pull-right[
+
+
+
+```r
+data_no_normal&lt;- rexp(100, rate=3)
+hist(data_no_normal, col='red', main='No normal')
+```
+
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+### Distribución normal: métodos visuales
+
+.pull-left[
+
+
+
+```r
+plot(density(data_normal), main="Normal")
+```
+
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+]
+.pull-right[
+
+
+```r
+plot(density(data_no_normal), main="No Normal")
+```
+
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+### Distribución normal: métodos visuales
+
+.pull-left[
+
+
+
+```r
+qqnorm(data_normal)
+qqline(data_normal)
+```
+
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+]
+.pull-right[
+
+
+```r
+qqnorm(data_no_normal)
+qqline(data_no_normal)
+```
+
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+### Distribución normal: métodos numéricos
+
+.pull-left[
+
+
+
+```r
+shapiro.test(data_normal)
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  data_normal
+## W = 0.99076, p-value = 0.2298
+```
+
+
+
+```r
+ks.test(data_normal, "pnorm")
+```
+
+```
+## 
+## 	One-sample Kolmogorov-Smirnov test
+## 
+## data:  data_normal
+## D = 0.053155, p-value = 0.6243
+## alternative hypothesis: two-sided
+```
+]
+.pull-right[
+
+
+```r
+shapiro.test(data_no_normal)
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  data_no_normal
+## W = 0.89131, p-value = 5.641e-07
+```
+
+
+```r
+ks.test(data_no_normal, "pnorm")
+```
+
+```
+## 
+## 	One-sample Kolmogorov-Smirnov test
+## 
+## data:  data_no_normal
+## D = 0.50783, p-value &lt; 2.2e-16
+## alternative hypothesis: two-sided
+```
+
+]
+---
+## Probando heterocedasticidad
+- Métodos visuales = Pruebas estadísticas de comparación y modelos lineales
+.pull-left[
+
+
+
+
+```r
+data("ToothGrowth")
+boxplot(len ~ supp, data=ToothGrowth, col=c("red", "blue"), main="Dientes")
+```
+
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+.pull-right[
+
+
+```r
+data("iris")
+boxplot(Petal.Width ~ Species, data=iris, col=c("pink", "purple", "cyan"), main="Flores")
+```
+
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+---
+## Probando heterocedasticidad
+- Métodos visuales = Pruebas estadísticas de comparación y modelos lineales
+.pull-left[
+
+```r
+aggregate(len ~ supp, data = ToothGrowth, var)
+```
+
+```
+##   supp      len
+## 1   OJ 43.63344
+## 2   VC 68.32723
+```
+Ratio
+
+```r
+8.26 / 6.60 
+```
+
+```
+## [1] 1.251515
+```
+
+]
+.pull-right[
+
+```r
+aggregate(Petal.Width ~ Species, data = iris, var)
+```
+
+```
+##      Species Petal.Width
+## 1     setosa  0.01110612
+## 2 versicolor  0.03910612
+## 3  virginica  0.07543265
+```
+Ratio
+
+```r
+r1&lt;-0.03910612 / 0.0110612
+r2&lt;-0.07543265 / 0.1110612 
+r3&lt;-0.07543264 / 0.03910612
+cbind(r1,r2,r3)
+```
+
+```
+##            r1        r2       r3
+## [1,] 3.535432 0.6791989 1.928922
+```
+]
+---
+### Probando heterocedasticidad
+.pull-left[
+
+```r
+m1&lt;-lm(len ~ supp, data=ToothGrowth)
+par(mfrow = c(1, 2))
+plot(m1, which=c(1,3))
+```
+
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+.pull-right[
+
+
+```r
+m2&lt;-lm(Petal.Width ~ Species, data=iris)
+par(mfrow = c(1, 2))
+plot(m2, which=c(1,3))
+```
+
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+### Probando heterocedasticidad
+
+
+.pull-left[
+Prueba para dos niveles = F
+
+
+```r
+var.test(len ~ supp, data = ToothGrowth) 
+```
+
+```
+## 
+## 	F test to compare two variances
+## 
+## data:  len by supp
+## F = 0.6386, num df = 29, denom df = 29, p-value = 0.2331
+## alternative hypothesis: true ratio of variances is not equal to 1
+## 95 percent confidence interval:
+##  0.3039488 1.3416857
+## sample estimates:
+## ratio of variances 
+##          0.6385951
+```
+]
+
+
+.pull-right[
+
+
+```r
+lmtest::bptest(m2) #sobre un modelo
+```
+
+```
+## 
+## 	studentized Breusch-Pagan test
+## 
+## data:  m2
+## BP = 25.099, df = 2, p-value = 3.546e-06
+```
+
+]
+
+&gt;- Otras pruebas: Prueba de Levene, Goldfeld-Quand, White, entre otras.
+
+---
+# PRUEBAS PARAMÉTRICAS
+
+
+|VENTAJAS    | DESVENTAJAS     | 
+|-------------------|-------|
+| - Sensibles a rasgos de los datos recolectados  | - Más complicadas de calcular | 
+| - Estimaciones probabilísticas más exactas       |- Solo se pueden aplicar si se cumplen sus supuestos   | 
+| - Tienen una mayor eficiencia y poder estadístico      | - Los datos que se pueden observar son limitados| 
+
+---
+# PRUEBAS PARAMÉTRICAS
+
+
+|TIPO    |   PRUEBA     | 
+|:-------------------:|:-------:|
+| Comparación de 2 grupos	  |   t de Student/Welch  | 
+| Comparación de &gt;2 grupos       | Anova   | 
+| Correlación de dos variables     | Coeficiente de Pearson| 
+| Variables cualitativas     | Prueba de Z| 
+
+---
+# t de Student
+- Desarrollada por William Sealy Gosset. 
+
+- La prueba t permite comparar las medias de una muestra con la media teórica de una población, o comparar dos poblaciones. 
+
+- Una de las características de la prueba de student, es que permite la hipótesis alternativa de ver si dos medias son diferentes o si, una media es mayor, o menor que otra. 
+
+- Esta prueba tiene variantes dependiendo de nuestros datos.
+
+- Para ser utilizada es necesario que se cumplan los siguientes supuestos:
+&gt;- Muestreo aleatorio
+&gt;- Los datos y errores deben tener una distribución normal 
+&gt;- Cuando se comparan dos distribuciones las varianzas deben ser iguales (σ1=σ2) y/o homogéneas.
+
+---
+# t de Student una muestra
+
+
+En la prueba t de Student para una muestra, se usa la siguiente fórmula:
+
+
+`$$t=\frac{\bar{x}-\mu}{s/\sqrt{n}}$$`
+Dónde `\(t\)` es el estadístico, `\(\bar{x}\)` es la media muestral, `\(s\)` es la desviación estándar muestral, y `\(n\)` es el tamaño de la muestra. 
+
+El estadístico `\(t\)` posee un valor de p asociado dependiendo de los grados de libertad de la prueba. 
+
+Mide qué tan inusual es la media de la muestra observada de la media de la muestra hipotética. Lo hace midiendo qué tan lejos está la media de la muestra observada de la media de la población hipotética en términos de errores estándar.
+
+---
+### Ejemplo de una muestra
+
+.pull-left[
+
+
+```r
+data&lt;- data.frame(Congelador=1:10,
+                  Temperatura=c(-2.14,-0.8,
+                                -2.75,-2.58,   
+                                -2.26,-2.46,
+                                -1.33,-2.85,
+                                -0.93,-2.01))
+shapiro.test(data$Temperatura)$p.value
+```
+
+```
+## [1] 0.1823153
+```
+
+Manualmente 
+
+```r
+prom = mean(data$Temperatura); desves = sd(data$Temperatura); sn = sqrt(nrow(data));mu = 0
+t=(prom-mu)/(desves/sn)
+t;pt(t, df=9)
+```
+
+```
+## [1] -8.572431
+```
+
+```
+## [1] 6.345623e-06
+```
+]
+
+.pull-rigth[
+Con R
+
+```r
+t.test(data$Temperatura, mu = 0, alternative = "less")
+```
+
+```
+## 
+## 	One Sample t-test
+## 
+## data:  data$Temperatura
+## t = -8.5724, df = 9, p-value = 6.346e-06
+## alternative hypothesis: true mean is less than 0
+## 95 percent confidence interval:
+##       -Inf -1.580971
+## sample estimates:
+## mean of x 
+##    -2.011
+```
+]
+
+---
+
+# t de Student para medidas repetidas
+
+En la prueba t de Student para medidas repetidas se usa la siguiente fórmula:
+
+`$$t=\frac{\bar{x}_{d}-\mu_{d}}{s_{d}/\sqrt{n}}$$`
+Dónde `\(t\)` es el estadístico, `\(\bar{x_{d}}\)` es la media muestral de la diferencia de las medidas, `\(s_{d}\)` es la desviación estándar muestral, y `\(n_{d}\)` es el tamaño de la muestra. 
+
+- Data ejemplo:
+
+
+```r
+data_pareada&lt;- data.frame(Pan=1:10,
+                         Temp_pre=c(20.83,19.72,19.64,20.09,22.25,
+                                   20.83,21.31,22.50,21.17,19.57),
+                         Temp_post=c(100.87,98.58,109.09,121.83,122.78,
+                                     111.41,103.96,121.81,127.85,115.17))
+
+data_pareada$Diferencia&lt;- data_pareada$Temp_post - data_pareada$Temp_pre
+```
+
+---
+# Ejemplo muestras pareadas
+
+| Pan | Temp_pre | Temp_post | Diferencia |
+|:---:|:--------:|:---------:|:----------:|
+|  1  |  20.83   |  100.87   |   80.04    |
+|  2  |  19.72   |   98.58   |   78.86    |
+|  3  |  19.64   |  109.09   |   89.45    |
+|  4  |  20.09   |  121.83   |   101.74   |
+|  5  |  22.25   |  122.78   |   100.53   |
+|  6  |  20.83   |  111.41   |   90.58    |
+|  7  |  21.31   |  103.96   |   82.65    |
+|  8  |  22.50   |  121.81   |   99.31    |
+|  9  |  21.17   |  127.85   |   106.68   |
+| 10  |  19.57   |  115.17   |   95.60    |
+
+---
+# Ejemplo muestras pareadas
+
+.pull-left[
+
+
+```r
+shapiro.test(data_pareada$Diferencia)
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  data_pareada$Diferencia
+## W = 0.93611, p-value = 0.5106
+```
+
+Manualmente 
+
+```r
+prom = mean(data_pareada$Diferenci); desves = sd(data_pareada$Diferenci); sn = sqrt(nrow(data_pareada));mu = 0
+t=(prom-mu)/(desves/sn)
+t;pt(t, df=9, lower.tail = FALSE)
+```
+
+```
+## [1] 29.96903
+```
+
+```
+## [1] 1.253345e-10
+```
+]
+
+.pull-rigth[
+Con R
+
+```r
+t.test(data_pareada$Temp_post, data_pareada$Temp_pre, mu = 0, alternative = "greater", paired = TRUE)
+```
+
+```
+## 
+## 	Paired t-test
+## 
+## data:  data_pareada$Temp_post and data_pareada$Temp_pre
+## t = 29.969, df = 9, p-value = 1.253e-10
+## alternative hypothesis: true difference in means is greater than 0
+## 95 percent confidence interval:
+##  86.88337      Inf
+## sample estimates:
+## mean of the differences 
+##                  92.544
+```
+]
+
+---
+
+# t de Student para dos grupos
+
+En la prueba t de Student para dos grupós se usa la siguiente fórmula:
+
+`$$t_{obs}=\frac{\bar{x_{1}}-\bar{x_{2}}-\Delta}{\sqrt{s^2/n_{1}+s^2/n_{2}}}$$`
+
+Dónde `\(t_{obs}\)` es el estadístico, `\(\bar{x_{1,2}}\)` son los promedios de los grupos y `\(\Delta\)` es el promedio teórico de la distribución nula de la diferencia de promedios (usualmente se usa 0), el `\(s^2\)` viene dado por:
+`$$s^2=\frac{\Sigma{(x_{1}-\bar{x_{1}})^2}-\Sigma{(x_{2}-\bar{x_{2}})^2}}{n_{1}+n_{2}-2} = \frac{s^2_{1}(n_{1}-1)-s^2_{2}(n_{2}-1)}{n_{1}+n_{2}-2}$$` 
+
+En este caso los grados de libertad se calculan :
+`$$df = (n_{1}-1)+(n_{2}-1)=n_{1}+n_{2}-2$$`
+---
+# t de Student para dos grupos
+
+- Debemos tener en cuenta si hay dependencia o no de los grupos y si la varianza es igual.
+
+- Cuando los grupos son independientes, se supone que proceden de diferentes poblaciones que tienen la misma varianza. 
+
+- La t de muestras independientes es una medida de la diferencia de las medias de los dos grupos. 
+
+- La distribución de la que se muestrea la diferencia de medias no es de una sola población sino de la combinación de las dos poblaciones. 
+
+-Por ejemplo, tengo una población con promedio de 10 y otra de 7, varianzas de 4 y 4, entonces mi combinación tendrá un promedio de 3 (diferencia) y varianza de 8. 
+
+
+---
+# Ejemplo para dos grupos
+.pull-left[
+
+```r
+freidora&lt;- data.frame(
+  Oster1=c(4.72,7.40,3.50,3.85,4.47,
+           4.09,6.34,3.30,7.13,4.99),
+  Oster2=c(9.19,11.44,9.64,12.09,10.80,
+           12.71,10.04,9.06,6.31,9.44))
+ro1&lt;- freidora$Oster1-mean(freidora$Oster1)
+ro2&lt;- freidora$Oster2-mean(freidora$Oster2)
+
+shapiro.test(c(ro1,ro2))
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  c(ro1, ro2)
+## W = 0.9483, p-value = 0.342
+```
+
+]
+.pull-right[
+
+|Oster1|Oster2|
+|:----:|:----:|
+| 4.72 | 9.19 |
+| 7.40 |11.44 |
+| 3.50 | 9.64 |
+| 3.85 |12.09 |
+| 4.47 |10.80 |
+| 4.09 |12.71 |
+| 6.34 |10.04 |
+| 3.30 | 9.06 |
+| 7.13 | 6.31 |
+| 4.99 | 9.44 |
+]
+
+---
+# Ejemplo para dos grupos
+
+.pull-left[
+Manualmente 
+
+```r
+prom1 = mean(freidora$Oster1)
+prom2=mean(freidora$Oster2)
+
+s=((var(freidora$Oster1)*9)+(var(freidora$Oster2)*9))/(10+10-2)
+t=(prom1-prom2-0)/(sqrt(s/10+s/10))
+t; pt(-6.8527, df=18, lower.tail=TRUE)+pt(6.8527, df=18, lower.tail=FALSE)
+```
+
+```
+## [1] -6.852696
+```
+
+```
+## [1] 2.062577e-06
+```
+]
+
+.pull-rigth[
+Con R
+
+```r
+t.test(freidora$Oster1, freidora$Oster2, mu=0, paired=FALSE, alternative="two.sided", var.equal=TRUE)
+```
+
+```
+## 
+## 	Two Sample t-test
+## 
+## data:  freidora$Oster1 and freidora$Oster2
+## t = -6.8527, df = 18, p-value = 2.063e-06
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -6.654429 -3.531571
+## sample estimates:
+## mean of x mean of y 
+##     4.979    10.072
+```
+]
+
+---
+
+# Prueba de Welch
+
+.pull-left[
+
+Para los casos donde no se cumplen que las varianzas sean iguales u homogéneas.
+
+`$$t_{obs}=\frac{\bar{x_{1}}-\bar{x_{2}}-\Delta}{\sqrt{s_{1}^2/n_{1}+s_{2}^2/n_{2}}}$$`
+
+Los grados de libertad se calculan:
+
+`$$df =\frac{(s_{1}^2/n_{1}+s_{2}^2/n_{2})^2}{s_{1}^4/(n_{1}-1)+s_{2}^4/(n_{2}-1)}$$`
+]
+.pull-right[
+
+```r
+t.test(freidora$Oster1, freidora$Oster2, mu=0, paired=FALSE, alternative="two.sided", var.equal=FALSE)
+```
+
+```
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  freidora$Oster1 and freidora$Oster2
+## t = -6.8527, df = 17.268, p-value = 2.58e-06
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -6.659188 -3.526812
+## sample estimates:
+## mean of x mean of y 
+##     4.979    10.072
+```
+]
+---
+## Pruebas no paramétricas y supuestos estadísticos
+
+- Las pruebas no paramétricas no requieren que conozcamos la distribución de nuestros datos ni parámetros de la población de estudio como su media o varianza poblacional.
+
+- Las pruebas no paramétricas nos permiten analizar
+datos en escala nominal u ordinal y en su mayoría los resultados se derivan a partir de procedimientos de ordenación y recuento, por lo que su base lógica es de fácil comprensión. 
+
+- Cuando trabajamos con muestras pequeñas (n &lt; 10) en
+las que se desconoce si es válido suponer la normalidad de los datos, conviene utilizar pruebas no paramétricas
+
+- Pocos supuestos: aleatoriedad e independencia.
+
+---
+# PRUEBAS PARAMÉTRICAS
+
+
+|VENTAJAS    | DESVENTAJAS     | 
+|-------------------|-------|
+| - Mayor aplicabilidad | - Eficiencia estadística menor
+| - Se pueden usar vaiables ordinales     |- Poder estadísitico menor   | 
+| - Son más fáciles de calcular     | - No se pueden evaluar interacciones| 
+
+---
+# PRUEBAS PARAMÉTRICAS
+
+
+|TIPO    |   PRUEBA     | 
+|:-------------------:|:-------:|
+| Comparación de 2 grupos	  |   Wilcoxon/U Mann Withney | 
+| Comparación de &gt;2 grupos       | Kruskal-wallis/Friedman  | 
+| Correlación de dos variables     | Coeficiente de Spearman| 
+| Variables cualitativas     | Chi-cuadrada/Fisher| 
+
+---
+# U Mann Whitney
+
+- Este	estadístico,	introducido	simultáneamente	por	Mann	y	Whitney	en	1947,	se	utiliza	para	contrastar	si	dos	muestras,	extraídas	independientemente,	proceden	de	la	misma	población, no admite medidas repetidas.
+
+- Compara	las	diferencias	entre	dos	medianas,	por	lo	que	se	basa	en	rangos	en	lugar	de	en	los	parámetros	de	la	muestra	(media,	varianza).
+
+- Requisitos: variable cuantitativa, independencia y aleatoriedad.
+
+- Establece que existen diferencias entre las medianas  de dos grupos sin suponer cuál de las dos es mayor o menor que la otra. 
+---
+# U Mann Whitney
+
+- Se ordenan los datos (juntando los grupos) en orden creciente. El rango de cada dato será el número de orden que le corresponde.
+
+- Se suman los rangos de cada uno de los grupos y se calcula la suma de los rangos de cada grupo `\((W_{1},W_{2}\)`).
+
+- Se escoge el menor y considerando los df se puede usar una tablar de valores críticos para evaluar la significancia. 
+
+
+---
+# U Mann Whitney - Ejemplo
+.pull-left[
+
+```r
+data_u&lt;- data.frame(Control=c(12, 22, 38, 42, 50),
+                    Tratamiento=c(14, 25, 40, 44, 48))
+```
+
+
+```r
+knitr::kable(data_u, align = "c")
+```
+
+
+
+| Control | Tratamiento |
+|:-------:|:-----------:|
+|   12    |     14      |
+|   22    |     25      |
+|   38    |     40      |
+|   42    |     44      |
+|   50    |     48      |
+]
+
+.pull-right[
+
+| Tipo | Valor |
+|:----:|:-----:|
+|  C   |  12   |
+|  E   |  14   |
+|  C   |  22   |
+|  E   |  25   |
+|  C   |  38   |
+|  E   |  40   |
+|  C   |  42   |
+|  E   |  44   |
+|  E   |  48   |
+|  C   |  50   |
+
+]
+---
+
+
+| C  | E  | C  | E  | C  | E  | C  | E  | E  | C  |
+|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+| 12 | 14 | 22 | 25 | 38 | 40 | 42 | 44 | 48 | 50 |
+Para la condición de control, tomamos el número total de valores de la condición experimental que son más pequeños que cada valor de la condición de control. Hay 0 valores (12), 1 que es más pequeño que el segundo valor más pequeño (22), 2 que son más pequeños que el tercer valor más pequeño (38), 3 que son menores de 42, y 5 que son menores de 50 para un total de 11.
+
+Para la condición del tratamiento, tomamos el número de valores que son más pequeños que cada valor de la condición experimental. Hay 1 valor de condición de control más pequeño que el valor de condición experimental más pequeño (14), 2 que son más pequeños que 25, 3 que son más pequeños que 40, 4 que son más pequeños que 44 y también 4 que son más pequeños que 48 para un Total de 14. 
+
+Tomamos el valor de U como el menor que sería 11.
+---
+# U Mann Whitney - Ejemplo
+En R
+
+```r
+wilcox.test(data_u$Control, data_u$Tratamiento, paired = FALSE)
+```
+
+```
+## 
+## 	Wilcoxon rank sum exact test
+## 
+## data:  data_u$Control and data_u$Tratamiento
+## W = 11, p-value = 0.8413
+## alternative hypothesis: true location shift is not equal to 0
+```
+
+
+---
+# Prueba de Wilcoxon para dos muestras dependientes
+
+- Esta es la opción no paramétrica para la prueba t de Student cuando los errores no se distribuyen de manera normal y se tiene una muestra o dos muestras apareadas. 
+
+- El estadístico W se calcula obteniendo las diferencias de los valores, ordenando de menor a mayor el valor absouto de las diferencias las diferencias y asignando un rango, en caso de empates se obtiene la media de los rangos y se asigna el mismo rango a las dos observaciones.
+
+- Funciona de la misma manera que la anterior pero es más potente porque tiene en cuenta la magnitud de los rangos de las diferencias. Es decir, una pequeña diferencia negativa o positiva significa menos o más en el cálculo de la estadística de prueba que una gran diferencia negativa o positiva.
+
+---
+
+# Prueba de Wilcoxon 
+
+1. Arreglar las observaciones pareadas y obtener las diferencias de cada pareja.
+2. Arreglar las diferencias en función de rangos como valores absolutos, sin importar el signo, pero de manera que los rangos conserven el signo correspondiente a la
+diferencia.
+3. Obtener la sumatoria de los rangos en valores absolutos por signos.
+4. Si se trata de muestras pequeñas, comparar el valor obtenido con los valores críticos de la tabla de Wilcoxon.
+5. Distribuir las muestras mayores que 25 bajo la curva normal y, por tanto, calcular el valor Z.
+6. Decidir si se acepta o rechaza la hipótesis
+
+---
+
+# Prueba Wilcoxon - ejemplo
+.pull-left[
+
+```r
+data_w&lt;- data.frame(Observ=c(1:11),
+                    Antes=c(1,8,0,0,1,3,3,3,5,6,5),
+                    Después=c(3,5,-2,-1,1,-5,-7,-362,-1,0,-10))
+data_w$Diferencia&lt;- data_w$Antes-data_w$Después
+```
+]
+.pull-right[
+&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:center;"&gt; Observ &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Antes &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Después &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Diferencia &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 10 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -362 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 365 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -10 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 15 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+.pull-left[
+&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:center;"&gt; Observ &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Antes &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Después &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Diferencia &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -362 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 365 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -10 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 15 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 10 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -2 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+.pull-rigth[
+&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:center;"&gt; Observ &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Antes &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Después &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Diferencia &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Rango &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -362 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 365 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 10.0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -10 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 9.0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8.0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 7.0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5.5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5.5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 4.0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 2.5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1.0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0.0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 2.5 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]
+
+---
+&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:center;"&gt; Observ &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Antes &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Después &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Diferencia &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Rango &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Signo &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Rango_Signo &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -362 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 365 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 10.0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; + &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; +10 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -10 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 9.0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; + &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; +9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8.0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; + &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; +8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 7.0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; + &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; +7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5.5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; + &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; +5.5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5.5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; + &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; +5.5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 4.0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; + &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; +4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 2.5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; + &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; +2.5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1.0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; + &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; +1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0.0 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; = &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; =0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 2.5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; - &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -2.5 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+---
+
+# Wilcoxon -ejemplo
+.pull-left[
+
+```r
+T_pos = 10+9+8+7+5.5+5.5+4+2.5+1
+T_neg = 2.5
+
+T_pos; T_neg
+```
+
+```
+## [1] 52.5
+```
+
+```
+## [1] 2.5
+```
+
+```r
+Two_tailed_W = max(T_pos,T_neg)
+Two_tailed_W
+```
+
+```
+## [1] 52.5
+```
+]
+
+.pull-right[
+En R
+
+```r
+wilcox.test(data_w$Antes, data_w$Después, paired = TRUE)
+```
+
+```
+## 
+## 	Wilcoxon signed rank test with continuity correction
+## 
+## data:  data_w$Antes and data_w$Después
+## V = 52.5, p-value = 0.0124
+## alternative hypothesis: true location shift is not equal to 0
+```
+
+]
+---
+# RESUMEN
+
+|ESTADÍSTICOS PARAMÉTRICOS       |  ESTADÍSTICOS NO PARAMÉTRICOS     | 
+  |:-------------------|:-------|
+  | Se conoce la población, paramétros y distribución  |   No se conoce la población, parámetros y distribución | 
+  | Supuestos basados en población       | Sin supuestos sobre la población  | 
+  | Aplicable para variables continuas     | Aplicable para continuas y muchos tipos de discretas| 
+  | Mayor poder estadísitco     | Menor poder estadístico| 
+---
+## Referencias y material suplementario
+
+- [Advanced Statistics I 2021 Edition](https://bookdown.org/danbarch/psy_207_advanced_stats_I/differences-between-two-things.html#sign-binomial-test)
+
+- [Pruebas paramétricas y no paramétricas](https://enviromigration.files.wordpress.com/2016/04/pruebas-paramc3a9tricas-y-no-parametricas.pdf)
+
+- [Estadística paramétrica y no paramétrica](https://rstudio-pubs-static.s3.amazonaws.com/724751_c45a17f9e45f464c93e94f3fb0c6d340.html#16)
+
+- [Prácticos de bioestadística 2](https://derek-corcoran-barrios.github.io/AyduantiaStats/_book/t-student.html)
+
+
+---
+class: inverse, center, middle
+
+background-image: url(https://scontent.fpbc4-1.fna.fbcdn.net/v/t1.6435-9/186488007_894978351283481_2834840846317438655_n.png?_nc_cat=107&amp;ccb=1-7&amp;_nc_sid=730e14&amp;_nc_eui2=AeEgLiV7cxpEnMLIQaq-cj7-BNxQhs6jc4IE3FCGzqNzgqzp65iawk_RfS8gP_fuq9oRHT2NkEMpPVmlmtpXhq6d&amp;_nc_ohc=R-mekgfZ-BEAX8tFsX1&amp;_nc_ht=scontent.fpbc4-1.fna&amp;oh=00_AfCrVhrIj1fpV8p1QRwGOqDrJaFFbpJp-sI4k9xDPR5jLA&amp;oe=6418CE99)
+background-size: contain
+
+---
+class: inverse, center, middle
+
+# MUCHAS GRACIAS
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
