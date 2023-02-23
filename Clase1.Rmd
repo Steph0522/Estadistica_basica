@@ -49,7 +49,7 @@ knitr::include_graphics("https://ctbcuatx.edu.mx/wp-content/uploads/2020/07/1617
 
 + Pruebas paramétricas y supuestos estadísticos.
 
-    - t de student
+    - t de Student
 
 + Pruebas no paramétricas y supuestos estadísticos.
 
@@ -203,7 +203,7 @@ aggregate(len ~ supp, data = ToothGrowth, var)
 ```
 Ratio
 ```{r}
-8.26 / 6.60 
+68.32 /  43.63
 ```
 
 ]
@@ -214,9 +214,9 @@ aggregate(Petal.Width ~ Species, data = iris, var)
 ```
 Ratio
 ```{r}
-r1<-0.03910612 / 0.0110612
-r2<-0.07543265 / 0.1110612 
-r3<-0.07543264 / 0.03910612
+r1<-0.03910612 / 0.01110612 #versicolor vs setosa
+r2<-0.07543265 / 0.01110612 #virginca vs setosa
+r3<-0.07543264 / 0.03910612 #virginica vs versicolor
 cbind(r1,r2,r3)
 ```
 ]
@@ -289,9 +289,7 @@ lmtest::bptest(m2) #sobre un modelo
 
 ---
 # t de Student
-- Desarrollada por William Sealy Gosset. 
-
-- La prueba t permite comparar las medias de una muestra con la media teórica de una población, o comparar dos poblaciones. 
+- Desarrollada por William Sealy Gosset. La prueba t permite comparar las medias de una muestra con la media teórica de una población, o comparar dos poblaciones. 
 
 - Una de las características de la prueba de student, es que permite la hipótesis alternativa de ver si dos medias son diferentes o si, una media es mayor, o menor que otra. 
 
@@ -310,7 +308,7 @@ En la prueba t de Student para una muestra, se usa la siguiente fórmula:
 
 
 $$t=\frac{\bar{x}-\mu}{s/\sqrt{n}}$$
-Dónde $t$ es el estadístico, $\bar{x}$ es la media muestral, $s$ es la desviación estándar muestral, y $n$ es el tamaño de la muestra. 
+Dónde $t$ es el estadístico, $\bar{x}$ es la media muestral, $s$ es la desviación estándar muestral,  $n$ es el tamaño de la muestra y $\mu$ es la media verdadera de la población. 
 
 El estadístico $t$ posee un valor de p asociado dependiendo de los grados de libertad de la prueba. 
 
@@ -348,12 +346,12 @@ t.test(data$Temperatura, mu = 0, alternative = "less")
 
 ---
 
-# t de Student para medidas repetidas
+### t de Student para medidas pareadas
 
-En la prueba t de Student para medidas repetidas se usa la siguiente fórmula:
+En la prueba t de Student para medidas pareadas se usa la siguiente fórmula:
 
 $$t=\frac{\bar{x}_{d}-\mu_{d}}{s_{d}/\sqrt{n}}$$
-Dónde $t$ es el estadístico, $\bar{x_{d}}$ es la media muestral de la diferencia de las medidas, $s_{d}$ es la desviación estándar muestral, y $n_{d}$ es el tamaño de la muestra. 
+Dónde $t$ es el estadístico, $\bar{x_{d}}$ es la media muestral de la diferencia de las medidas, $s_{d}$ es la desviación estándar muestral, $n$ es el tamaño de la muestra y $\mu_{d}$ es la diferencia de medias de mis grupos. 
 
 - Data ejemplo:
 
@@ -414,7 +412,7 @@ $$df = (n_{1}-1)+(n_{2}-1)=n_{1}+n_{2}-2$$
 ---
 # t de Student para dos grupos
 
-- Debemos tener en cuenta si hay dependencia o no de los grupos y si la varianza es igual.
+- Debemos tener en cuenta si hay dependencia o no de los grupos y si la varianza es igual y/o homogénea. 
 
 - Cuando los grupos son independientes, se supone que proceden de diferentes poblaciones que tienen la misma varianza. 
 
