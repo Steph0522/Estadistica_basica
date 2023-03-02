@@ -106,9 +106,13 @@ Los supuestos del ANOVA son:
 
 ### El estadístico F se calcula así: 
 
-$F$ = $\frac{\sigma^2_{entre}}{\sigma^2_{dentro}}$ = $\frac{intervarianza}{intravarianza}$= $\frac{\frac{n\Sigma(\bar{x}_{k}-\bar{x})^2}{k-1}}{\frac{\Sigma(x_{k}-\bar{x_{k}})^2}{N-k}}$ = $\frac{\frac{SCT}{k-1}}{\frac{SCE}{gl}}$
+$$
+\begin{aligned}
+F = \frac{\sigma^2_{entre}}{\sigma^2_{dentro}} = \frac{intervarianza}{intravarianza}= \frac{\frac{n\Sigma(\bar{x}_{k}-\bar{x})^2}{k-1}}{\frac{\Sigma(x_{k}-\bar{x_{k}})^2}{N-k}} = \frac{\frac{SCT}{k-1}}{\frac{SCE}{gl}}
+\end{aligned}
+$$
 
-siendo $k$ los niveles y $N-k$ los grados de libertad y $SC$ la suma de cuadrados. 
+siendo $k$ los niveles, $N-k$ y $k - 1$ los grados de libertad y $SC$ la suma de cuadrados del error (intravarianza) y de los tratamientos (intervarianza).
 ---
 # Análisis de varianza de una vía : Tabla
 
@@ -160,8 +164,8 @@ lmtest::bptest(lm(Valor~Tratamiento, data = datost))
 ### Calculemos los grados de libertad
 
 - Hay cuatro niveles entonces $k-1$ = 3
-- Hay cinco observaciones en cada grupo entonces = (4*5)-3 = 16
-- Los grados de libertad totales son 20-1 = 19
+- Hay cinco observaciones en cada grupo entonces $N - k$ = (4*5)-3 = 16
+- Los grados de libertad totales son $N - 1$ = 20-1 = 19
 
 ### Calculemos SCT
 SCT = $n\Sigma(\bar{x}_{k}-\bar{x})^2$
@@ -450,12 +454,11 @@ plot(agricolae::SNK.test(anov, "Tratamiento", console = FALSE))
 
 
 ---
-# Prueba de Duncan
-
-1. Ordenar las medias de la más grande a la más pequeña.
-2. Cacular el valor crítico *q*, aquí denominad como $r$, como las pruebas anteriores
-4. Encontrar el valor crítico en la tabla de valores críticos con los $k$ y los grados de libertad del error. 
-5. Calcular el valor crítico de Duncan, denotado por:
+### Prueba de Duncan
+- Ordenar las medias de la más grande a la más pequeña.
+- Cacular el valor crítico *q*, aquí denominad como $r$, como las pruebas anteriores
+- Encontrar el valor crítico en la tabla de valores críticos con los $k$ y los grados de libertad del error. 
+- Calcular el valor crítico de Duncan, denotado por:
 
 $$
 \begin{aligned}
@@ -464,8 +467,7 @@ R_{(k,\nu,\alpha_{p})}=r_{k, \alpha_{p},k, v}\sqrt{\frac{CME}{n}}
 $$
 - Este $r$ (antes $q_{crítico}$) es variable como anteriormente vimos en la prueba de Newman-Keuls y las diferencias de los promedios:
   - Si las dos primeras medias no son diferentes entonces para la prueba
-  - Si la dos primeras son diferentes sigue con los siguientes pares de medias desde el paso 2, para cuando no encuentres diferencias.
-5. En cada comparación de medias corrige los grados de libertad según el número de grupos comparados.
+- En cada comparación de medias corrige los grados de libertad según el número de grupos comparados.
 ---
 ### Prueba de Duncan
 Además de estos pasos que lucen muy parecidos a la prueba de Newman-Keuls este método introduce además una significancia o $\alpha$ variable, esto como un **"nivel de protección"** basado en los grados de libertad y viene dada por la fórmula:
