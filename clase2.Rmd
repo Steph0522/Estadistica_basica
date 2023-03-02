@@ -455,10 +455,10 @@ plot(agricolae::SNK.test(anov, "Tratamiento", console = FALSE))
 
 ---
 ### Prueba de Duncan
-- Ordenar las medias de la más grande a la más pequeña.
-- Cacular el valor crítico *q*, aquí denominad como $r$, como las pruebas anteriores
-- Encontrar el valor crítico en la tabla de valores críticos con los $k$ y los grados de libertad del error. 
-- Calcular el valor crítico de Duncan, denotado por:
+1. Ordenar las medias de la más grande a la más pequeña.
+2. Cacular el valor crítico *q*, aquí denominad como $r$, como las pruebas anteriores
+3. Encontrar el valor crítico en la tabla de valores críticos con los $k$ y los grados de libertad del error. 
+4. Calcular el valor crítico de Duncan, denotado por:
 
 $$
 \begin{aligned}
@@ -467,7 +467,8 @@ R_{(k,\nu,\alpha_{p})}=r_{k, \alpha_{p},k, v}\sqrt{\frac{CME}{n}}
 $$
 - Este $r$ (antes $q_{crítico}$) es variable como anteriormente vimos en la prueba de Newman-Keuls y las diferencias de los promedios:
   - Si las dos primeras medias no son diferentes entonces para la prueba
-- En cada comparación de medias corrige los grados de libertad según el número de grupos comparados.
+  - Si la dos primeras son diferentes sigue con los siguientes pares de medias desde el paso 2, para cuando no encuentres diferencias.
+5. En cada comparación de medias corrige los grados de libertad según el número de grupos comparados.
 ---
 ### Prueba de Duncan
 Además de estos pasos que lucen muy parecidos a la prueba de Newman-Keuls este método introduce además una significancia o $\alpha$ variable, esto como un **"nivel de protección"** basado en los grados de libertad y viene dada por la fórmula:
