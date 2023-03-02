@@ -393,7 +393,7 @@ plot(hsd_agricolae)
 3. Cacular el valor crítico *q* con la fórmula:
 $$
 \begin{aligned}
-q_{crítico} = \frac{\bar{x_{1}-\bar{x_{2}}}}{S_{12}}
+q_{crítico} = \frac{\bar{x_{1}}-\bar{x_{2}}}{S_{12}}
 \end{aligned}
 $$
 4. Encontrar el valor crítico en la tabla de valores críticos con los $k$ y los grados de libertad del error. [Tabla1](https://elvers.us/stats/tables/qprobability.html), [Tabla2](https://www.statisticshowto.com/studentized-range-distribution/#qtable) `r fontawesome::fa("link", fill = "#103261")`
