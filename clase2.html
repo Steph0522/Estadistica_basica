@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introducción a la estadística</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dra. Stephanie Hereira Pacheco" />
+    <script src="clase2_files/header-attrs-2.18/header-attrs.js"></script>
+    <script src="clase2_files/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="clase2_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="clase2_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"Press Ctrl+C to Copy"})</script>
+    <link href="clase2_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="clase2_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Introducción a la estadística
+]
+.author[
+### Dra. Stephanie Hereira Pacheco
+]
+.institute[
+### CTCB, UATx
+]
+.date[
+### 02-03-2023
+]
+
+---
+
+remotes::install_github("rstudio-education/armcompanion")
+
+
+
+
+
+
+.pull-left[
+.center-left[
+&lt;img src="https://ctbcuatx.edu.mx/wp-content/uploads/2020/07/1617710_1048843451811700_2278987052727773097_o-1920x805.jpg" width="600" height="200" /&gt;
+]]
+.pull-right[
+!["](https://upload.wikimedia.org/wikipedia/commons/a/a6/Logotipo_de_la_CONACYT.png)]
+---
+
+# Contenido
+
++ Análisis de varianza - ANOVA
+
++ Análisis de varianza de una vía
+
++ Pruebas de comparaciones múltiples para ANOVA
+
+    - Tukey- HSD
+
+    - Newman-Keuls
+     
+    - Duncan
+    
+    
+---
+## Análisis de varianza - ANOVA
+
+&lt;uw-blockquote&gt; La técnica de análisis de varianza (**ANOVA**) también conocida como análisis factorial y desarrollada por Fisher en 1930, constituye la herramienta básica para el estudio del efecto de una o más varaibles independientes (cada uno con dos o más niveles) sobre la media de una variable continua. 
+
+
+&lt;uw-blockquote&gt;El análisis de varianza nos permite evaluar el efecto de `\(k\)` variables independientes y su interacción en un experimento. En el ANOVA las variables independientes se denominan **factores**.
+
+---
+## Análisis de varianza - ANOVA
+
+&lt;uw-blockquote&gt; Cuando existe una única variable independiente se denomina **Anova de un factor** (one way anova, en inglés) y cuando son dos o más se denomina como **Anova factorial**.
+
+Los supuestos del ANOVA son:
+
+- Distribución normal de los residuales
+
+- Homocedasticidad
+
+- Aleatoriedad e independencia
+
+- Otros: Mismo número de observaciones por grupos, variable dependiente continua y variable independiente con tres o más grupos o niveles. 
+
+---
+# Análisis de varianza de una vía
+- El ANOVA de una vía es el tipo de análisis que se emplea cuando los datos no están pareados y se quiere estudiar si existen diferencias significativas entre las medias de una variable aleatoria continua en los diferentes niveles de otra variable cualitativa o factor.
+
++ Las hipótesis contrastadas en un ANOVA de un factor son:
+  - `\(H_{0}\)` : No existen diferencias entre las medias de los grupos, es decir `\(\mu_{1}=\mu_{2}=....\mu_{k}\)`
+  - `\(H_{1}\)` : Al menos un par de medias es significativamente diferente una de la otra
+
+
+---
+# Análisis de varianza de una vía
++ El ANOVA de una vía, crea una comparación entre la varianza en los datos que provienen de las diferencias entre grupos y la varianza en los datos que provienen de las diferencias dentro de los grupos.
+
+ - `\(H_{0}\)` : `\(\sigma^2_{entre} = 0\)`    `\(\rightarrow\)` `\(\sigma^2_{entre}\)` + `\(\sigma^2_{dentro}\)` =  `\(\sigma^2_{dentro}\)`
+ 
+ - `\(H_{1}\)` : `\(\sigma^2_{entre} &gt; 0\)`   `\(\rightarrow\)` `\(\sigma^2_{entre}\)` + `\(\sigma^2_{dentro}\)` &gt;  `\(\sigma^2_{dentro}\)`
+ 
+- La forma en que el ANOVA hace esta comparación es evaluando las razones de las varianzas entre grupos y las varianzas dentro de los grupos: a nivel de población, si la razón es igual a 1, entonces las dos cosas son iguales, si la razón es mayor que uno, entonces la varianza entre grupos es al menos un poco mayor que 0 y esto lo conocemos como el **el estadístico F**.
+---
+# Análisis de varianza de una vía
+
+### El estadístico F se calcula así: 
+
+`\(F\)` = `\(\frac{\sigma^2_{entre}}{\sigma^2_{dentro}}\)` = `\(\frac{intervarianza}{intravarianza}\)`= `\(\frac{\frac{n\Sigma(\bar{x}_{k}-\bar{x})^2}{k-1}}{\frac{\Sigma(x_{k}-\bar{x_{k}})^2}{N-k}}\)` = `\(\frac{\frac{SCT}{k-1}}{\frac{SCE}{gl}}\)`
+
+siendo `\(k\)` los niveles y `\(N-k\)` los grados de libertad y `\(SC\)` la suma de cuadrados. 
+---
+# Análisis de varianza de una vía : Tabla
+
+|Fuente de variación|Suma de cuadrados|Grados de libertad|Cuadros promedios|F|
+|:--------:|:---------------:|:----------------:||:--------------:||:-:|
+|Entre Grupos|SCT|k-1|SCT/k-1|F=CMT/CME|
+|Dentro de los grupos o Error|SCE|N-k|SCE/N-k|
+|Total|SCT|N-1|
+
+---
+# Ejemplo aplicado
+
+```r
+datos&lt;- data.frame(Tratamiento1=c(-3.10,0.18,-0.72,0.09,-1.66),
+                  Tratamiento2=c(7.28,3.06,4.74,5.29,7.88),
+                  Tratamiento3=c(0.12,5.51,5.72,5.93,6.56),
+                  Tratamiento4=c(8.18,9.05,11.21,7.31,8.83))
+```
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:center;"&gt; Tratamiento1 &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Tratamiento2 &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Tratamiento3 &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Tratamiento4 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; -3.10 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 7.28 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0.12 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8.18 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 0.18 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3.06 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5.51 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 9.05 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; -0.72 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 4.74 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5.72 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 11.21 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 0.09 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5.29 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5.93 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 7.31 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; -1.66 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 7.88 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 6.56 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8.83 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+---
+## Probemos los supuestos
+.pull-left[
+### Normalidad
+
+
+```r
+ro1&lt;- datos$Tratamiento1-mean(datos$Tratamiento1)
+ro2&lt;- datos$Tratamiento2-mean(datos$Tratamiento1)
+ro3&lt;- datos$Tratamiento3-mean(datos$Tratamiento1)
+ro4&lt;- datos$Tratamiento4-mean(datos$Tratamiento1)
+
+
+shapiro.test(c(ro1,ro2, ro3, ro4))
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  c(ro1, ro2, ro3, ro4)
+## W = 0.93347, p-value = 0.1801
+```
+]
+.pull-right[
+### Homocedasticidad
+
+```r
+library(tidyverse)
+datost&lt;- datos %&gt;% pivot_longer(cols = everything(), names_to = "Tratamiento", values_to = "Valor")
+
+lmtest::bptest(lm(Valor~Tratamiento, data = datost))
+```
+
+```
+## 
+## 	studentized Breusch-Pagan test
+## 
+## data:  lm(Valor ~ Tratamiento, data = datost)
+## BP = 2.3472, df = 3, p-value = 0.5035
+```
+]
+
+---
+### Calculemos los grados de libertad
+
+- Hay cuatro niveles entonces `\(k-1\)` = 3
+- Hay cinco observaciones en cada grupo entonces = (4*5)-3 = 16
+- Los grados de libertad totales son 20-1 = 19
+
+### Calculemos SCT
+SCT = `\(n\Sigma(\bar{x}_{k}-\bar{x})^2\)`
+
+```r
+SCT1= 5*(mean(datos$Tratamiento1)-mean(as.matrix(datos)))^2
+SCT2= 5*(mean(datos$Tratamiento2)-mean(as.matrix(datos)))^2
+SCT3= 5*(mean(datos$Tratamiento3)-mean(as.matrix(datos)))^2
+SCT4= 5*(mean(datos$Tratamiento4)-mean(as.matrix(datos)))^2
+
+SCT= (SCT1+SCT2+SCT3+SCT4); SCT
+```
+
+```
+## [1] 257.9391
+```
+ 
+---
+### Calculemos SCE
+.pull-left[SCE = `\(\Sigma(x_{k}-\bar{x_{k}})^2\)`
+
+```r
+SCE1= sum((datos$Tratamiento1-mean(datos$Tratamiento1))^2)
+SCE2= sum((datos$Tratamiento2-mean(datos$Tratamiento2))^2)
+SCE3= sum((datos$Tratamiento3-mean(datos$Tratamiento3))^2)
+SCE4= sum((datos$Tratamiento4-mean(datos$Tratamiento4))^2)
+
+SCE = (SCE1+SCE2+SCE3+SCE4); SCE
+```
+
+```
+## [1] 58.82228
+```
+]
+
+### Calculemos STT 
+
+.pull-right[
+STT = `\(\Sigma(x_{k}-\bar{x})^2\)`
+
+```r
+STT1= sum((datos$Tratamiento1-mean(as.matrix(datos)))^2)
+STT2= sum((datos$Tratamiento2-mean(as.matrix(datos)))^2)
+STT3= sum((datos$Tratamiento3-mean(as.matrix(datos)))^2)
+STT4= sum((datos$Tratamiento4-mean(as.matrix(datos)))^2)
+
+STT = (STT1+STT2+STT3+STT4); STT
+```
+
+```
+## [1] 316.7614
+```
+]
+---
+
+.pull-left[
+### Calculemos CMT
+
+```r
+CMT=SCT/(4-1);CMT
+```
+
+```
+## [1] 85.97971
+```
+### Calculemos CME
+
+```r
+CME=SCE/(20-4);CME
+```
+
+```
+## [1] 3.676393
+```
+]
+.pull-right[
+### Calculemos F
+
+
+```r
+valor_F= CMT/CME; valor_F
+```
+
+```
+## [1] 23.38698
+```
+
+### Calculemos el valor p
+
+```r
+valor_p&lt;-pf(valor_F, df1=4-1, df2=20-4, lower.tail=FALSE); valor_p
+```
+
+```
+## [1] 4.313444e-06
+```
+]
+---
+# Hagámoslo en R
+
+```r
+anova_R&lt;- aov(Valor~Tratamiento, data = datost)
+summary(anova_R)    
+```
+
+```
+##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## Tratamiento  3 257.94   85.98   23.39 4.31e-06 ***
+## Residuals   16  58.82    3.68                     
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+#### Comparando...
+
+```r
+valor_F;valor_p
+```
+
+```
+## [1] 23.38698
+```
+
+```
+## [1] 4.313444e-06
+```
+
+
+---
+## Pruebas de comparaciones múltiples para ANOVA
+
+&lt;uw-blockquote&gt; *post hoc* viene del latín y sginifica **para después de esto**. Las pruebas *post hoc* se realizan después de que se ha establecido un efecto significativo de un factor para obtener más información sobre la naturaleza de un efecto, es decir, ¿qué niveles del factor están asociados con puntajes más altos o más bajos?
+
+&lt;uw-blockquote&gt; Las pruebas *post hoc* pueden ayudar a contar la historia de los datos más allá de una simple diferencia.
+---
+## Pruebas de comparaciones múltiples para ANOVA
+&lt;uw-blockquote&gt; Para identificar las diferencias hay que comparar dos a dos las medias de todos los grupos introducidos en el análisis mediante pruebas que comparen 2 grupos, a esto se le conoce como análisis *post-hoc*.
+
+&lt;uw-blockquote&gt; Los niveles de significancia pueden ser ajustados en función del número de comparaciones. Debido a la inflación del error de tipo I, cuantas más comparaciones se hagan más aumenta la probabilidad de encontrar diferencias significativas 
+
+---
+### Pruebas de comparaciones múltiples para ANOVA
+La siguiente tabla ilustra cuántas comparaciones por pares están asociadas con cada número de grupos junto con la tasa de error por familia:
+
+&lt;img src="https://statologos.com/ezoimgfmt/fourpillarfreedom.com/wp-content/uploads/2019/04/post_hoc1.jpg?ezimgfmt=rs:386x298/rscb1/ng:webp/ngcb1" style="display: block; margin: auto;" /&gt;
+
+Afortunadamente,muchas de las pruebas *post hoc* nos brindan una forma de hacer múltiples comparaciones entre grupos mientras se controla la tasa de error familiar.
+
+
+
+---
+# Tukey - HSD
+
+&lt;uw-blockquote&gt; La prueba de **diferencia honestamente significativa** (HSD) de Tukey es una forma de determinar si la diferencia entre dos medias de condición es (honestamente) significativa. 
+
+&lt;uw-blockquote&gt; La prueba de Tukey es muy similar a un t-test, excepto que corrige la tasa de error del experimento. Esto lo consigue empleando un estadístico que sigue una distribución llamada **studentized range distribution** en lugar de una distribución t. 
+
+---
+# Tukey - HSD
+
+- El estadístico de prueba para la prueba HSD de Tukey es el estadístico de rango estudentizado `\(HSD\)` se define como:
+$$
+`\begin{aligned}
+HSD_{crítico}=q_{crit, \alpha,k, N-k}\sqrt{\frac{CME}{n}}
+\end{aligned}`
+$$
+- Dónde: `\(q_{crit, \alpha,k, N-k}\)` es el valor crítico q, CME es la suma de cuadrados del error calculado anteriormente y n el número de observaciones de un grupo.
+
+- La diferencia entre cada promedio de grupos se compara con el valor obtenido de `\(HSD\)` y los valores mayores que este son considerados significativos.
+
+---
+# Tukey - HSD
+
+- La otra forma es calcular el valor observado de `\(q\)` y compararlo directamente con el valor `\(q_{crítico}\)` siguiendo la misma lógica que el valor observado debe ser mayor al valor crítico para ser considerado significativo. La fórmula del valor observado es:
+$$
+`\begin{aligned}
+q_{observado}= \frac{\bar{x_{1}}- \bar{x_{2}}}{\sqrt{\frac{CME}{n}}}
+\end{aligned}`
+$$
+
+
+
+
+- Para calcular los intervalos de confianza, se realiza con la siguiente fórmula:
+
+$$
+`\begin{aligned}
+(\bar{x_{1}}-\bar{x_{2}})\pm q_{crit}\sqrt{CME/n}
+\end{aligned}`
+$$
+
+- Dónde `\(\bar{x_{1}}-\bar{x_{2}}\)` es la diferencia entre las medias de los dos grupos que se están comparando y los demás parámetros son idénticos a los calculados en la fórmula del `\(HSD\)`.
+
+---
+## Ejemplo aplicado
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:center;"&gt; Tratamiento1 &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Tratamiento2 &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Tratamiento3 &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Tratamiento4 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; -3.10 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 7.28 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0.12 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8.18 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 0.18 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3.06 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5.51 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 9.05 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; -0.72 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 4.74 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5.72 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 11.21 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 0.09 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5.29 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5.93 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 7.31 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; -1.66 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 7.88 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 6.56 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8.83 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+---
+## Ejemplo aplicado
+.pull-left[
+
+```r
+qcri&lt;-qtukey(p = 0.95, nmeans = 4, df = 16)
+
+sqme&lt;- sqrt(CME/5)
+
+HSD_val&lt;- qcri*sqme
+
+
+qcri; HSD_val
+```
+
+```
+## [1] 4.046093
+```
+
+```
+## [1] 3.469459
+```
+
+
+
+```r
+dif1&lt;- mean(datos$Tratamiento3)-mean(datos$Tratamiento1)
+dif2&lt;- mean(datos$Tratamiento2)-mean(datos$Tratamiento1)
+dif3&lt;- mean(datos$Tratamiento4)-mean(datos$Tratamiento1)
+dif4&lt;- mean(datos$Tratamiento2)-mean(datos$Tratamiento3)
+dif5&lt;- mean(datos$Tratamiento4)-mean(datos$Tratamiento3)
+dif6&lt;- mean(datos$Tratamiento4)-mean(datos$Tratamiento2)
+```
+
+
+]
+
+.pull-right[
+
+```r
+dif1&gt;HSD_val;dif2&gt;HSD_val;dif3&gt;HSD_val;dif4&gt;HSD_val;dif5&gt;HSD_val;dif6&gt;HSD_val
+```
+
+```
+## [1] TRUE
+```
+
+```
+## [1] TRUE
+```
+
+```
+## [1] TRUE
+```
+
+```
+## [1] FALSE
+```
+
+```
+## [1] TRUE
+```
+
+```
+## [1] FALSE
+```
+
+```r
+up&lt;-dif1+(qcri*sqme)
+low&lt;-dif1-(qcri*sqme)
+data.frame(up,low)
+```
+
+```
+##         up      low
+## 1 9.279459 2.340541
+```
+
+]
+---
+## Ejemplo aplicado
+
+
+```r
+anov&lt;- aov(Valor~Tratamiento,data = datost)
+TukeyHSD(anov, "Tratamiento", ordered = T)
+```
+
+```
+##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+##     factor levels have been ordered
+## 
+## Fit: aov(formula = Valor ~ Tratamiento, data = datost)
+## 
+## $Tratamiento
+##                            diff        lwr       upr     p adj
+## Tratamiento3-Tratamiento1 5.810  2.3405407  9.279459 0.0010334
+## Tratamiento2-Tratamiento1 6.692  3.2225407 10.161459 0.0002473
+## Tratamiento4-Tratamiento1 9.958  6.4885407 13.427459 0.0000022
+## Tratamiento2-Tratamiento3 0.882 -2.5874593  4.351459 0.8847332
+## Tratamiento4-Tratamiento3 4.148  0.6785407  7.617459 0.0165968
+## Tratamiento4-Tratamiento2 3.266 -0.2034593  6.735459 0.0687136
+```
+---
+## Ejemplo aplicado
+
+.pull-left[
+
+```r
+plot(TukeyHSD(anov, "Tratamiento", ordered = T))
+```
+
+&lt;img src="clase2_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+```r
+library(agricolae)
+hsd_agricolae&lt;-HSD.test(anov, "Tratamiento", group = TRUE)
+plot(hsd_agricolae)
+```
+
+&lt;img src="clase2_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+---
+## Newman-Keuls (student)
+
++ Es una prueba *post hoc* para probar las diferencias en las medias de varios grupos. Se realiza después que una ANOVA haya dado significativo y sé usa para identificar qué par de medias son diferentes. La prueba se basa también en la **distribución de rango estudentizada**.
+
+- El método Newman-Keuls fue introducido por Newman en 1939 y desarrollado por Keuls en 1952.
+
++ Las hipótesis que manjea son:
+ - `\(H_{o}\)`: media 1 = media 2
+ - `\(H_{a}\)`: media 1 ≠ media 2
+
+---
+## Newman-Keuls
+1. Ordenar las medias de la más grande a la más pequeña.
+2. Calcular el error estándar como anteriormente `\(\sqrt{\frac{CME}{n}}\)`
+3. Cacular el valor crítico *q* con la fórmula:
+$$
+`\begin{aligned}
+q_{crítico} = \frac{\bar{x_{1}-\bar{x_{2}}}}{S_{12}}
+\end{aligned}`
+$$
+4. Encontrar el valor crítico en la tabla de valores críticos con los `\(k\)` y los grados de libertad del error. [Tabla1](https://elvers.us/stats/tables/qprobability.html), [Tabla2](https://www.statisticshowto.com/studentized-range-distribution/#qtable) <svg aria-hidden="true" role="img" viewBox="0 0 640 512" style="height:1em;width:1.25em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#103261;overflow:visible;position:relative;"><path d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/></svg>
+  - Si las dos primeras medias no son diferentes entonces para la prueba
+  - Si la dos primeras son diferentes sigue con los siguientes pares de medias desde el paso 2, para cuando no encuentres diferencias.
+5. En cada comparación de medias corrige los grados de libertad según el número de grupos comparados. 
+
+---
+#[Newman-Keuls](https://methods.sagepub.com/reference/encyc-of-research-design/n266.xml) <svg aria-hidden="true" role="img" viewBox="0 0 640 512" style="height:1em;width:1.25em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#103261;overflow:visible;position:relative;"><path d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/></svg>
+
+.pull-left[
+&lt;img src="https://pltfrmrsrcscdn.sagepub.com/srm/images/encyc-of-research-design/p900-1.jpg" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+&lt;img src="https://pltfrmrsrcscdn.sagepub.com/srm/images/encyc-of-research-design/p901-2.jpg" style="display: block; margin: auto;" /&gt;
+
+ &gt; Con 40 df y 5 k. 
+ 
+]
+
+---
+.pull-left[
+
+```r
+agricolae::SNK.test(anov, "Tratamiento", console = TRUE)
+```
+
+```
+## 
+## Study: anov ~ "Tratamiento"
+## 
+## Student Newman Keuls Test
+## for Valor 
+## 
+## Mean Square Error:  3.676392 
+## 
+## Tratamiento,  means
+## 
+##               Valor      std r   Min   Max
+## Tratamiento1 -1.042 1.368912 5 -3.10  0.18
+## Tratamiento2  5.650 1.955479 5  3.06  7.88
+## Tratamiento3  4.768 2.627845 5  0.12  6.56
+## Tratamiento4  8.916 1.449890 5  7.31 11.21
+## 
+## Alpha: 0.05 ; DF Error: 16 
+## 
+## Critical Range
+##        2        3        4 
+## 2.570735 3.129078 3.469459 
+## 
+## Means with the same letter are not significantly different.
+## 
+##               Valor groups
+## Tratamiento4  8.916      a
+## Tratamiento2  5.650      b
+## Tratamiento3  4.768      b
+## Tratamiento1 -1.042      c
+```
+]
+.pull-right[
+
+```r
+plot(agricolae::SNK.test(anov, "Tratamiento", console = FALSE))
+```
+
+![](clase2_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+]
+---
+## Tukey-HSD vs Newman-Keuls
+
+- Aunque el punto importante de las pruebas *post hoc* es disminuir los errores tipo I, en algunos casos Newman-Keuls con más de 4 grupos incrementa ligeramente este tipo de error en mayor medida que Tukey-HSD.
+
+- Newman-Keuls trabaja de forma secuencial por lo que por esta razón no puede producor intervalos de confianza al 95% para cada diferencia ni valores de p justados como lo hace Tukey-HSD.
+
+- Newman-Keuls es más conservadora que Tukey-HSD por su umbral móvil y el valor de alfa o significancia es el mismo del ANOVA (0.05).
+
+---
+# Prueba de Duncan
+
++ Es una variante de Newman-Keuls pero a diferencia de esta, usa niveles de alfa que se van incrementando en cada paso del procedimiento, siendo menos suceptible a errores de Tipo I.
+
+- Fue propuesto por David B. Duncan en 1955 como una modificación del método anterior pero con más poder estadístico. 
+
+- El resultado de la prueba es un conjunto de subconjuntos de medias, donde en cada subconjunto se ha encontrado que las medias no son significativamente diferentes entre sí.
+
+- Tiene los mismos supuestos que las anteriores y requiere un resultado significativo en el ANOVA.
+
+
+
+---
+# Prueba de Duncan
+
+1. Ordenar las medias de la más grande a la más pequeña.
+2. Cacular el valor crítico *q*, aquí denominad como `\(r\)`, como las pruebas anteriores
+4. Encontrar el valor crítico en la tabla de valores críticos con los `\(k\)` y los grados de libertad del error. 
+5. Calcular el valor crítico de Duncan, denotado por:
+
+$$
+`\begin{aligned}
+R_{(k,\nu,\alpha_{p})}=r_{k, \alpha_{p},k, v}\sqrt{\frac{CME}{n}}
+\end{aligned}`
+$$
+- Este `\(r\)` (antes `\(q_{crítico}\)`) es variable como anteriormente vimos en la prueba de Newman-Keuls y las diferencias de los promedios:
+  - Si las dos primeras medias no son diferentes entonces para la prueba
+  - Si la dos primeras son diferentes sigue con los siguientes pares de medias desde el paso 2, para cuando no encuentres diferencias.
+5. En cada comparación de medias corrige los grados de libertad según el número de grupos comparados.
+---
+### Prueba de Duncan
+Además de estos pasos que lucen muy parecidos a la prueba de Newman-Keuls este método introduce además una significancia o `\(\alpha\)` variable, esto como un **"nivel de protección"** basado en los grados de libertad y viene dada por la fórmula:
+
+$$
+`\begin{aligned}
+\alpha_{p}=1-(1-\alpha)^K-1
+\end{aligned}`
+$$
+El nivel de protección puede ser tabulado por varios valores, de la siguiente manera:
+
+||Nivel de protección alfa| probabilidad de error tipo I|
+|:-:|:-----------------------:|:-----------------------------:|
+|k=2|0.95|0.05|
+|k=3|0.95|0.097|
+|k=4|0.95|0.143|
+|k=5|0.95|0.185|
+|k=6|0.95|0.226|
+
+---
+.pull-left[
+
+```r
+agricolae::duncan.test(anov, "Tratamiento", console = TRUE)
+```
+
+```
+## 
+## Study: anov ~ "Tratamiento"
+## 
+## Duncan's new multiple range test
+## for Valor 
+## 
+## Mean Square Error:  3.676392 
+## 
+## Tratamiento,  means
+## 
+##               Valor      std r   Min   Max
+## Tratamiento1 -1.042 1.368912 5 -3.10  0.18
+## Tratamiento2  5.650 1.955479 5  3.06  7.88
+## Tratamiento3  4.768 2.627845 5  0.12  6.56
+## Tratamiento4  8.916 1.449890 5  7.31 11.21
+## 
+## Alpha: 0.05 ; DF Error: 16 
+## 
+## Critical Range
+##        2        3        4 
+## 2.570735 2.695760 2.773913 
+## 
+## Means with the same letter are not significantly different.
+## 
+##               Valor groups
+## Tratamiento4  8.916      a
+## Tratamiento2  5.650      b
+## Tratamiento3  4.768      b
+## Tratamiento1 -1.042      c
+```
+]
+
+.pull-right[
+
+```r
+plot(agricolae::duncan.test(anov, "Tratamiento"))
+```
+
+![](clase2_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+
+]
+---
+# Duncan vs Newman-Keuls
+
+- La prueba de Duncan está basado en Newman-Keuls, éste último no protege la tasa de error familiar (tipo I) como Duncan con su alfa variable
+
+- La prueba de Duncan entonces intencionalmente sube los niveles del alfa en cada paso del procedimiento de Newman-Keuls
+
+- Por estas subidas de los alfas muchos critican esta prueba por ser muy liberal 
+
+---
+## Otras pruebas...
+
+- Prueba de Dunnet : comparar con un control
+
+- Prueba de Scheffé: se aplica también con datos no balanceados
+
+- Prueba de Fisher (LSD): mismo principio de Duncan pero con la distribución t. 
+
+- Tukey-Kramer: para datos desbalanceados.
+
+- Pruebas pareadas (t.test) con correcciones: Bonferroni, Holm-Bonferroni, FDR, entre otras. 
+
+
+---
+### Ejemplo aplicado
+
+- Carga la data de **"PlantGrowth"** y mira los diferentes tratamientos, luego corre el modelo en el ANOVA y prueba si hay diferencias significativas.
+- Aplica las tres pruebas vistas hoy y compara los resultados.
+
+
+```r
+data("PlantGrowth")
+```
+
+
+---
+### El día de hoy aprendimos que...
+- Se utiliza un ANOVA para determinar si existe o no una diferencia estadísticamente significativa entre las medias de tres o más grupos independientes.
+- Si un ANOVA produce un valor p que es menor que nuestro nivel de significancia, podemos usar pruebas *post hoc* para averiguar qué medias de grupo difieren entre sí.
+- Las pruebas *post hoc* nos permiten controlar la tasa de error familiar mientras realizamos múltiples comparaciones por pares.
+- La compensación de controlar la tasa de error familiar es un poder estadístico más bajo. Podemos reducir los efectos de un poder estadístico más bajo haciendo menos comparaciones por pares.
+- Debe determinar de antemano en qué grupos le gustaría hacer comparaciones por pares y qué prueba post hoc utilizará para hacerlo.
+
+---
+## Referencias y material suplementario
+
+- [Advanced Statistics I 2021 Edition](https://bookdown.org/danbarch/psy_207_advanced_stats_I/differences-between-two-things.html#sign-binomial-test)
+
+- [Pruebas paramétricas y no paramétricas](https://enviromigration.files.wordpress.com/2016/04/pruebas-paramc3a9tricas-y-no-parametricas.pdf)
+
+- [Estadística paramétrica y no paramétrica](https://rstudio-pubs-static.s3.amazonaws.com/724751_c45a17f9e45f464c93e94f3fb0c6d340.html#16)
+
+- [Prácticos de bioestadística 2](https://derek-corcoran-barrios.github.io/AyduantiaStats/_book/t-student.html)
+
+- [Pruebas post-hoc](https://statologos.com/pruebas-anova-post-hoc/)
+
+- [Post-Hoc Analysis with Tukey’s Test](https://rstudio-pubs-static.s3.amazonaws.com/181709_eec7a5bc24c04b8badeb297c4807109a.html)
+
+- [ANOVA](https://www.cienciadedatos.net/documentos/19_anova.html#Dunnett%E2%80%99s_correction_(Dunnett%E2%80%99s_test))
+
+- [Post-Hocs tests](https://www.statisticshowto.com/probability-and-statistics/statistics-definitions/post-hoc/)
+
+---
+# Tarea
+
+- Escoge un conjunto de datos de R, visto anteriormente o datos propios.
+- Escoge las variable de respuestas y grupos a evaluar
+- Prueba los supuestos de los estadísticos paramétricos
+- Si lo cumple y tiene más de dos niveles realiza un ANOVA y aplica los tres estadísticos post hoc hoy vistos y compara los resultados. 
+- Envía tu tarea a más tardar el 29 de marzo a las 3 pm al correo:
+barbara.cruz.s@uatx.mx, sehereirap@uatx.mx
+---
+class: inverse, center, middle
+
+
+# MUCHAS GRACIAS POR SU ATENCIÓN
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
