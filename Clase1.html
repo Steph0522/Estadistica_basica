@@ -4,13 +4,20 @@
     <title>Introducción a la estadística</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dra. Stephanie Hereira Pacheco" />
-    <script src="Clase1_files/header-attrs-2.18/header-attrs.js"></script>
+    <script src="Clase1_files/header-attrs-2.25/header-attrs.js"></script>
+    <script src="Clase1_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
     <script src="Clase1_files/clipboard-2.0.6/clipboard.min.js"></script>
     <link href="Clase1_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
     <script src="Clase1_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
     <script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"Press Ctrl+C to Copy"})</script>
-    <link href="Clase1_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-    <link href="Clase1_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link href="Clase1_files/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+    <link href="Clase1_files/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+    <link href="Clase1_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="Clase1_files/tile-view-0.2.6/tile-view.js"></script>
+    <link href="Clase1_files/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
+    <script src="Clase1_files/shareon-1.4.1/shareon.min.js"></script>
+    <link href="Clase1_files/xaringanExtra-shareagain-0.2.6/shareagain.css" rel="stylesheet" />
+    <script src="Clase1_files/xaringanExtra-shareagain-0.2.6/shareagain.js"></script>
     <script src="Clase1_files/kePrint-0.0.1/kePrint.js"></script>
     <link href="Clase1_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
@@ -22,6 +29,9 @@ class: center, middle, inverse, title-slide
 .title[
 # Introducción a la estadística
 ]
+.subtitle[
+## <img src="logo.jpg" style="width:2in" />
+]
 .author[
 ### Dra. Stephanie Hereira Pacheco
 ]
@@ -29,25 +39,54 @@ class: center, middle, inverse, title-slide
 ### CTCB, UATx
 ]
 .date[
-### 23-02-2023
+### 01-03-2024
 ]
 
 ---
 
-remotes::install_github("rstudio-education/armcompanion")
 
 
 
 
 
+<div>
+<style type="text/css">.xaringan-extra-logo {
+width: 110px;
+height: 128px;
+z-index: 0;
+background-image: url(https://www.ciisder.mx/images/logos/logo_uatx_2019.png);
+background-size: contain;
+background-repeat: no-repeat;
+position: absolute;
+top:1em;right:1em;
+}
+</style>
+<script>(function () {
+  let tries = 0
+  function addLogo () {
+    if (typeof slideshow === 'undefined') {
+      tries += 1
+      if (tries < 10) {
+        setTimeout(addLogo, 100)
+      }
+    } else {
+      document.querySelectorAll('.remark-slide-content:not(.title-slide):not(.inverse):not(.hide_logo)')
+        .forEach(function (slide) {
+          const logo = document.createElement('div')
+          logo.classList = 'xaringan-extra-logo'
+          logo.href = null
+          slide.appendChild(logo)
+        })
+    }
+  }
+  document.addEventListener('DOMContentLoaded', addLogo)
+})()</script>
+</div>
 
-.pull-left[
-.center-left[
-&lt;img src="https://ctbcuatx.edu.mx/wp-content/uploads/2020/07/1617710_1048843451811700_2278987052727773097_o-1920x805.jpg" width="600" height="200" /&gt;
-]]
-.pull-right[
-!["](https://upload.wikimedia.org/wikipedia/commons/a/a6/Logotipo_de_la_CONACYT.png)]
----
+
+
+
+
 
 # Contenido
 
@@ -91,7 +130,7 @@ data_normal&lt;- rnorm(200)
 hist(data_normal, col='steelblue', main='Normal')
 ```
 
-&lt;img src="Clase1_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
 ]
 .pull-right[
 
@@ -102,7 +141,7 @@ data_no_normal&lt;- rexp(100, rate=3)
 hist(data_no_normal, col='red', main='No normal')
 ```
 
-&lt;img src="Clase1_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
 ]
 ---
 ### Distribución normal: métodos visuales
@@ -115,7 +154,7 @@ hist(data_no_normal, col='red', main='No normal')
 plot(density(data_normal), main="Normal")
 ```
 
-&lt;img src="Clase1_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
 ]
 .pull-right[
 
@@ -124,7 +163,7 @@ plot(density(data_normal), main="Normal")
 plot(density(data_no_normal), main="No Normal")
 ```
 
-&lt;img src="Clase1_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -139,7 +178,7 @@ qqnorm(data_normal)
 qqline(data_normal)
 ```
 
-&lt;img src="Clase1_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
 ]
 .pull-right[
 
@@ -149,7 +188,7 @@ qqnorm(data_no_normal)
 qqline(data_no_normal)
 ```
 
-&lt;img src="Clase1_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
 ]
 ---
 ### Distribución normal: métodos numéricos
@@ -178,7 +217,7 @@ ks.test(data_normal, "pnorm")
 
 ```
 ## 
-## 	One-sample Kolmogorov-Smirnov test
+## 	Asymptotic one-sample Kolmogorov-Smirnov test
 ## 
 ## data:  data_normal
 ## D = 0.053155, p-value = 0.6243
@@ -207,7 +246,7 @@ ks.test(data_no_normal, "pnorm")
 
 ```
 ## 
-## 	One-sample Kolmogorov-Smirnov test
+## 	Asymptotic one-sample Kolmogorov-Smirnov test
 ## 
 ## data:  data_no_normal
 ## D = 0.50783, p-value &lt; 2.2e-16
@@ -228,7 +267,7 @@ data("ToothGrowth")
 boxplot(len ~ supp, data=ToothGrowth, col=c("red", "blue"), main="Dientes")
 ```
 
-&lt;img src="Clase1_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
 
 ]
 .pull-right[
@@ -239,7 +278,7 @@ data("iris")
 boxplot(Petal.Width ~ Species, data=iris, col=c("pink", "purple", "cyan"), main="Flores")
 ```
 
-&lt;img src="Clase1_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
 
 ]
 ---
@@ -303,7 +342,7 @@ par(mfrow = c(1, 2))
 plot(m1, which=c(1,3))
 ```
 
-&lt;img src="Clase1_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;" /&gt;
 
 ]
 .pull-right[
@@ -315,7 +354,7 @@ par(mfrow = c(1, 2))
 plot(m2, which=c(1,3))
 ```
 
-&lt;img src="Clase1_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Clase1_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
 
 ]
 
@@ -362,9 +401,29 @@ lmtest::bptest(m2) #sobre un modelo
 ## BP = 25.099, df = 2, p-value = 3.546e-06
 ```
 
+```r
+library(car)
+leveneTest(m2)
+```
+
+```
+## Levene's Test for Homogeneity of Variance (center = median)
+##        Df F value    Pr(&gt;F)    
+## group   2  19.892 2.261e-08 ***
+##       147                      
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+
+```r
+?fligner.test
+```
+
+
 ]
 
-&gt;- Otras pruebas: Prueba de Levene, Goldfeld-Quand, White, entre otras.
+&gt;- Otras pruebas: Prueba de Goldfeld-Quand, White, entre otras.
 
 ---
 # PRUEBAS PARAMÉTRICAS
@@ -475,7 +534,7 @@ t.test(data$Temperatura, mu = 0, alternative = "less")
 
 ---
 
-### t de Student para medidas pareadas
+## t de Student para medidas pareadas
 
 En la prueba t de Student para medidas pareadas se usa la siguiente fórmula:
 
@@ -496,7 +555,7 @@ data_pareada$Diferencia&lt;- data_pareada$Temp_post - data_pareada$Temp_pre
 ```
 
 ---
-# Ejemplo muestras pareadas
+## Ejemplo muestras pareadas
 
 | Pan | Temp_pre | Temp_post | Diferencia |
 |:---:|:--------:|:---------:|:----------:|
@@ -559,12 +618,12 @@ t.test(data_pareada$Temp_post, data_pareada$Temp_pre, mu = 0, alternative = "gre
 ## 
 ## data:  data_pareada$Temp_post and data_pareada$Temp_pre
 ## t = 29.969, df = 9, p-value = 1.253e-10
-## alternative hypothesis: true difference in means is greater than 0
+## alternative hypothesis: true mean difference is greater than 0
 ## 95 percent confidence interval:
 ##  86.88337      Inf
 ## sample estimates:
-## mean of the differences 
-##                  92.544
+## mean difference 
+##          92.544
 ```
 ]
 
@@ -596,7 +655,7 @@ En este caso los grados de libertad se calculan :
 
 
 ---
-# Ejemplo para dos grupos
+## Ejemplo para dos grupos
 .pull-left[
 
 ```r
@@ -771,7 +830,7 @@ las que se desconoce si es válido suponer la normalidad de los datos, conviene 
 
 
 ---
-# U Mann Whitney - Ejemplo
+## U Mann Whitney - Ejemplo
 .pull-left[
 
 ```r
@@ -863,7 +922,7 @@ diferencia.
 
 ---
 
-# Prueba Wilcoxon - ejemplo
+## Prueba Wilcoxon - ejemplo
 .pull-left[
 
 ```r
@@ -874,7 +933,7 @@ data_w$Diferencia&lt;- data_w$Antes-data_w$Después
 ```
 ]
 .pull-right[
-&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+&lt;table class=" lightable-classic" style="color: black; font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:center;"&gt; Observ &lt;/th&gt;
@@ -957,7 +1016,7 @@ data_w$Diferencia&lt;- data_w$Antes-data_w$Después
 ---
 
 .pull-left[
-&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+&lt;table class=" lightable-classic" style="color: black; font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:center;"&gt; Observ &lt;/th&gt;
@@ -1037,7 +1096,7 @@ data_w$Diferencia&lt;- data_w$Antes-data_w$Después
 &lt;/table&gt;
 ]
 .pull-rigth[
-&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+&lt;table class=" lightable-classic" style="color: black; font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:center;"&gt; Observ &lt;/th&gt;
@@ -1131,7 +1190,7 @@ data_w$Diferencia&lt;- data_w$Antes-data_w$Después
 ]
 
 ---
-&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+&lt;table class=" lightable-classic" style="color: black; font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:center;"&gt; Observ &lt;/th&gt;
@@ -1292,6 +1351,118 @@ wilcox.test(data_w$Antes, data_w$Después, paired = TRUE)
 ```
 
 ]
+
+---
+# Ejemplo aplicado
+
+
+```r
+Grupo1 &lt;- c(38.9, 61.2, 73.3, 21.8, 63.4, 64.6, 48.4, 48.8, 48.5)
+Grupo2 &lt;- c(67.8, 60, 63.4, 76, 89.4, 73.3, 67.3, 61.3, 62.4) 
+my_data &lt;- data.frame( 
+                group = rep(c("G1", "G2"), each = 9),
+                weight = c(Grupo1,  Grupo2)
+                )
+```
+¿Hay diferencias entre estos dos grupos?
+
+--
+
+
+.pull-left[
+
+```r
+with(my_data, shapiro.test(weight[group == "G1"]))
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  weight[group == "G1"]
+## W = 0.94266, p-value = 0.6101
+```
+]
+.pull-rigth[
+
+```r
+#Prueba de normalidad
+with(my_data, shapiro.test(weight[group == "G2"])) 
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  weight[group == "G2"]
+## W = 0.86425, p-value = 0.1066
+```
+]
+---
+# Ejemplo aplicado
+
+
+```r
+Grupo1 &lt;- c(38.9, 61.2, 73.3, 21.8, 63.4, 64.6, 48.4, 48.8, 48.5)
+Grupo2 &lt;- c(67.8, 60, 63.4, 76, 89.4, 73.3, 67.3, 61.3, 62.4) 
+my_data &lt;- data.frame( 
+                group = rep(c("G1", "G2"), each = 9),
+                weight = c(Grupo1,  Grupo2)
+                )
+```
+¿Hay diferencias entre estos dos grupos?
+--
+
+```r
+var.test(weight ~ group, data = my_data)
+```
+
+```
+## 
+## 	F test to compare two variances
+## 
+## data:  weight by group
+## F = 2.7675, num df = 8, denom df = 8, p-value = 0.1714
+## alternative hypothesis: true ratio of variances is not equal to 1
+## 95 percent confidence interval:
+##   0.6242536 12.2689506
+## sample estimates:
+## ratio of variances 
+##           2.767478
+```
+
+---
+# Ejemplo aplicado
+
+
+```r
+Grupo1 &lt;- c(38.9, 61.2, 73.3, 21.8, 63.4, 64.6, 48.4, 48.8, 48.5)
+Grupo2 &lt;- c(67.8, 60, 63.4, 76, 89.4, 73.3, 67.3, 61.3, 62.4) 
+my_data &lt;- data.frame( 
+                group = rep(c("G1", "G2"), each = 9),
+                weight = c(Grupo1,  Grupo2)
+                )
+```
+¿Hay diferencias entre estos dos grupos?
+--
+
+```r
+t.test(Grupo1, Grupo2, var.equal = TRUE)
+```
+
+```
+## 
+## 	Two Sample t-test
+## 
+## data:  Grupo1 and Grupo2
+## t = -2.7842, df = 16, p-value = 0.01327
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -29.748019  -4.029759
+## sample estimates:
+## mean of x mean of y 
+##  52.10000  68.98889
+```
 ---
 # RESUMEN
 
@@ -1301,7 +1472,10 @@ wilcox.test(data_w$Antes, data_w$Después, paired = TRUE)
   | Supuestos basados en población       | Sin supuestos sobre la población  | 
   | Aplicable para variables continuas     | Aplicable para continuas y muchos tipos de discretas| 
   | Mayor poder estadísitco     | Menor poder estadístico| 
+
+
 ---
+
 ## Referencias y material suplementario
 
 - [Advanced Statistics I 2021 Edition](https://bookdown.org/danbarch/psy_207_advanced_stats_I/differences-between-two-things.html#sign-binomial-test)
@@ -1319,13 +1493,10 @@ wilcox.test(data_w$Antes, data_w$Después, paired = TRUE)
 - Escoge las variable de respuestas y grupos a evaluar (verifica que sean dos grupos si son más filtrar).
 - Prueba los supuestos de los estadísticos paramétricos
 - Dependiendo de tus resultados aplica el estadístico adecuado en cada caso. 
-- Envía tu tarea a más tardar el 29 de marzo a las 3 pm al correo:
-barbara.cruz.s@uatx.mx, sehereirap@uatx.mx
----
-class: inverse, center, middle
+- Sube tu tarea a más tardar el 29 de marzo en el classroom.
+- Puede ser un script de R o un documento en word pero pega el código y resultados.
 
-background-image: url(https://scontent.fpbc4-1.fna.fbcdn.net/v/t1.6435-9/186488007_894978351283481_2834840846317438655_n.png?_nc_cat=107&amp;ccb=1-7&amp;_nc_sid=730e14&amp;_nc_eui2=AeEgLiV7cxpEnMLIQaq-cj7-BNxQhs6jc4IE3FCGzqNzgqzp65iawk_RfS8gP_fuq9oRHT2NkEMpPVmlmtpXhq6d&amp;_nc_ohc=R-mekgfZ-BEAX8tFsX1&amp;_nc_ht=scontent.fpbc4-1.fna&amp;oh=00_AfCrVhrIj1fpV8p1QRwGOqDrJaFFbpJp-sI4k9xDPR5jLA&amp;oe=6418CE99)
-background-size: contain
+
 
 ---
 class: inverse, center, middle

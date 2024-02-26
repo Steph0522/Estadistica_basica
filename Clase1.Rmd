@@ -1,15 +1,19 @@
 ---
 title: "Introducción a la estadística"
+subtitle: "![](logo.jpg){width=2in}"
 author: "Dra. Stephanie Hereira Pacheco"
 institute: "CTCB, UATx"
-date: "23-02-2023"
+date: 01-03-2024
 output:
   xaringan::moon_reader:
     css: xaringan-themer.css
     nature:
       ratio: '16:9'
 ---
-remotes::install_github("rstudio-education/armcompanion")
+```{r jquery, echo=FALSE}
+htmltools::tagList(rmarkdown::html_dependency_jquery())
+```
+
 
 ```{r xaringan-themer, include=FALSE, warning=FALSE, eval=FALSE}
 library(xaringanthemer)
@@ -29,21 +33,26 @@ htmltools::tagList(
     success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
   ),
   rmarkdown::html_dependency_font_awesome()
+  )
+
+xaringanExtra::use_logo(
+  image_url = "https://www.ciisder.mx/images/logos/logo_uatx_2019.png",
+  position = xaringanExtra::css_position(top = "1em", right = "1em")
 )
+
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_share_again()
+
+
 ```
+
+
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 library(tidyverse)
 ```
 
-.pull-left[
-.center-left[
-```{r echo=FALSE, out.height=200, out.width= 600, }
-knitr::include_graphics("https://ctbcuatx.edu.mx/wp-content/uploads/2020/07/1617710_1048843451811700_2278987052727773097_o-1920x805.jpg")
-```
-]]
-.pull-right[
-!["](https://upload.wikimedia.org/wikipedia/commons/a/a6/Logotipo_de_la_CONACYT.png)]
----
+
 
 # Contenido
 
@@ -260,11 +269,18 @@ var.test(len ~ supp, data = ToothGrowth)
 ```{r, fig.align='center', fig.height=5,fig.width=8, message=FALSE, warning=FALSE}
 lmtest::bptest(m2) #sobre un modelo
 
+library(car)
+leveneTest(m2)
 ```
+
+```{r, eval=FALSE}
+?fligner.test
+```
+
 
 ]
 
->- Otras pruebas: Prueba de Levene, Goldfeld-Quand, White, entre otras.
+>- Otras pruebas: Prueba de Goldfeld-Quand, White, entre otras.
 
 ---
 # PRUEBAS PARAMÉTRICAS
@@ -346,7 +362,7 @@ t.test(data$Temperatura, mu = 0, alternative = "less")
 
 ---
 
-### t de Student para medidas pareadas
+## t de Student para medidas pareadas
 
 En la prueba t de Student para medidas pareadas se usa la siguiente fórmula:
 
@@ -367,7 +383,7 @@ data_pareada$Diferencia<- data_pareada$Temp_post - data_pareada$Temp_pre
 ```
 
 ---
-# Ejemplo muestras pareadas
+## Ejemplo muestras pareadas
 ```{r, echo=FALSE}
 knitr::kable(data_pareada, align = "c")
 ```
@@ -424,7 +440,7 @@ $$df = (n_{1}-1)+(n_{2}-1)=n_{1}+n_{2}-2$$
 
 
 ---
-# Ejemplo para dos grupos
+## Ejemplo para dos grupos
 .pull-left[
 ```{r}
 freidora<- data.frame(
@@ -541,7 +557,7 @@ las que se desconoce si es válido suponer la normalidad de los datos, conviene 
 
 
 ---
-# U Mann Whitney - Ejemplo
+## U Mann Whitney - Ejemplo
 .pull-left[
 ```{r}
 data_u<- data.frame(Control=c(12, 22, 38, 42, 50),
@@ -605,7 +621,7 @@ diferencia.
 
 ---
 
-# Prueba Wilcoxon - ejemplo
+## Prueba Wilcoxon - ejemplo
 .pull-left[
 ```{r}
 data_w<- data.frame(Observ=c(1:11),
@@ -616,9 +632,10 @@ data_w$Diferencia<- data_w$Antes-data_w$Después
 ```
 ]
 .pull-right[
-```{r,echo=FALSE}
-knitr::kable(data_w, align = "c")%>% 
-  kableExtra::kable_paper(full_width = F)
+```{r,echo=FALSE, warning=FALSE,message=FALSE}
+library(kableExtra)
+knitr::kable(data_w, align = "c") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
 ```
 ]
 
@@ -626,15 +643,15 @@ knitr::kable(data_w, align = "c")%>%
 
 .pull-left[
 ```{r, echo=FALSE}
-knitr::kable(data_w %>% dplyr::arrange(-Diferencia), align = "c")%>% 
-  kableExtra::kable_paper(full_width = F)
+knitr::kable(data_w %>% dplyr::arrange(-Diferencia), align = "c") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
 ```
 ]
 .pull-rigth[
 ```{r, echo=FALSE}
 dato<- data_w %>% dplyr::arrange(-Diferencia) %>% mutate(Rango=c(10,9,8,7,5.5,5.5,4,2.5,1,0,2.5)) 
-knitr::kable(dato, align = "c")%>% 
-  kableExtra::kable_paper(full_width = F)
+knitr::kable(dato, align = "c") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
 ```
 
 ]
@@ -642,8 +659,8 @@ knitr::kable(dato, align = "c")%>%
 ---
 ```{r,echo=FALSE}
 dato<- data_w %>% dplyr::arrange(-Diferencia) %>% mutate(Rango=c(10,9,8,7,5.5,5.5,4,2.5,1,0,2.5)) %>% mutate(Signo=c("+", "+", "+","+", "+", "+","+","+","+","=","-"), Rango_Signo=paste0(Signo,Rango)) 
-knitr::kable(dato, align = "c")%>% 
-  kableExtra::kable_paper(full_width = F)
+knitr::kable(dato, align = "c") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
 ```
 ---
 
@@ -668,6 +685,70 @@ wilcox.test(data_w$Antes, data_w$Después, paired = TRUE)
 ```
 
 ]
+
+---
+# Ejemplo aplicado
+
+```{r}
+Grupo1 <- c(38.9, 61.2, 73.3, 21.8, 63.4, 64.6, 48.4, 48.8, 48.5)
+Grupo2 <- c(67.8, 60, 63.4, 76, 89.4, 73.3, 67.3, 61.3, 62.4) 
+my_data <- data.frame( 
+                group = rep(c("G1", "G2"), each = 9),
+                weight = c(Grupo1,  Grupo2)
+                )
+
+```
+¿Hay diferencias entre estos dos grupos?
+
+--
+
+
+.pull-left[
+```{r}
+with(my_data, shapiro.test(weight[group == "G1"]))
+```
+]
+.pull-rigth[
+```{r}
+#Prueba de normalidad
+with(my_data, shapiro.test(weight[group == "G2"])) 
+```
+]
+---
+# Ejemplo aplicado
+
+```{r}
+Grupo1 <- c(38.9, 61.2, 73.3, 21.8, 63.4, 64.6, 48.4, 48.8, 48.5)
+Grupo2 <- c(67.8, 60, 63.4, 76, 89.4, 73.3, 67.3, 61.3, 62.4) 
+my_data <- data.frame( 
+                group = rep(c("G1", "G2"), each = 9),
+                weight = c(Grupo1,  Grupo2)
+                )
+
+```
+¿Hay diferencias entre estos dos grupos?
+--
+```{r}
+var.test(weight ~ group, data = my_data)
+```
+
+---
+# Ejemplo aplicado
+
+```{r}
+Grupo1 <- c(38.9, 61.2, 73.3, 21.8, 63.4, 64.6, 48.4, 48.8, 48.5)
+Grupo2 <- c(67.8, 60, 63.4, 76, 89.4, 73.3, 67.3, 61.3, 62.4) 
+my_data <- data.frame( 
+                group = rep(c("G1", "G2"), each = 9),
+                weight = c(Grupo1,  Grupo2)
+                )
+
+```
+¿Hay diferencias entre estos dos grupos?
+--
+```{r}
+t.test(Grupo1, Grupo2, var.equal = TRUE)
+```
 ---
 # RESUMEN
 
@@ -677,7 +758,10 @@ wilcox.test(data_w$Antes, data_w$Después, paired = TRUE)
   | Supuestos basados en población       | Sin supuestos sobre la población  | 
   | Aplicable para variables continuas     | Aplicable para continuas y muchos tipos de discretas| 
   | Mayor poder estadísitco     | Menor poder estadístico| 
+
+
 ---
+
 ## Referencias y material suplementario
 
 - [Advanced Statistics I 2021 Edition](https://bookdown.org/danbarch/psy_207_advanced_stats_I/differences-between-two-things.html#sign-binomial-test)
@@ -695,13 +779,10 @@ wilcox.test(data_w$Antes, data_w$Después, paired = TRUE)
 - Escoge las variable de respuestas y grupos a evaluar (verifica que sean dos grupos si son más filtrar).
 - Prueba los supuestos de los estadísticos paramétricos
 - Dependiendo de tus resultados aplica el estadístico adecuado en cada caso. 
-- Envía tu tarea a más tardar el 29 de marzo a las 3 pm al correo:
-barbara.cruz.s@uatx.mx, sehereirap@uatx.mx
----
-class: inverse, center, middle
+- Sube tu tarea a más tardar el 29 de marzo en el classroom.
+- Puede ser un script de R o un documento en word pero pega el código y resultados.
 
-background-image: url(https://scontent.fpbc4-1.fna.fbcdn.net/v/t1.6435-9/186488007_894978351283481_2834840846317438655_n.png?_nc_cat=107&ccb=1-7&_nc_sid=730e14&_nc_eui2=AeEgLiV7cxpEnMLIQaq-cj7-BNxQhs6jc4IE3FCGzqNzgqzp65iawk_RfS8gP_fuq9oRHT2NkEMpPVmlmtpXhq6d&_nc_ohc=R-mekgfZ-BEAX8tFsX1&_nc_ht=scontent.fpbc4-1.fna&oh=00_AfCrVhrIj1fpV8p1QRwGOqDrJaFFbpJp-sI4k9xDPR5jLA&oe=6418CE99)
-background-size: contain
+
 
 ---
 class: inverse, center, middle
