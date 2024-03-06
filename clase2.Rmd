@@ -1,15 +1,20 @@
 ---
 title: "Introducción a la estadística"
+subtitle: "![](logo.jpg){width=2in}"
 author: "Dra. Stephanie Hereira Pacheco"
 institute: "CTCB, UATx"
-date: "02-03-2023"
+date: "08-03-2024"
 output:
   xaringan::moon_reader:
     css: xaringan-themer.css
     nature:
       ratio: '16:9'
 ---
-remotes::install_github("rstudio-education/armcompanion")
+
+```{r jquery, echo=FALSE}
+htmltools::tagList(rmarkdown::html_dependency_jquery())
+```
+
 
 ```{r xaringan-themer, include=FALSE, warning=FALSE, eval=FALSE}
 library(xaringanthemer)
@@ -29,21 +34,26 @@ htmltools::tagList(
     success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
   ),
   rmarkdown::html_dependency_font_awesome()
+  )
+
+xaringanExtra::use_logo(
+  image_url = "https://www.ciisder.mx/images/logos/logo_uatx_2019.png",
+   width = "80px",
+  height = "90px",
+  position = xaringanExtra::css_position(top = "1em", right = "1em")
 )
+
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_share_again()
+
+
 ```
+
+
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 library(tidyverse)
 ```
-
-.pull-left[
-.center-left[
-```{r echo=FALSE, out.height=200, out.width= 600, }
-knitr::include_graphics("https://ctbcuatx.edu.mx/wp-content/uploads/2020/07/1617710_1048843451811700_2278987052727773097_o-1920x805.jpg")
-```
-]]
-.pull-right[
-!["](https://upload.wikimedia.org/wikipedia/commons/a/a6/Logotipo_de_la_CONACYT.png)]
----
 
 # Contenido
 
@@ -422,13 +432,19 @@ knitr::include_graphics("https://pltfrmrsrcscdn.sagepub.com/srm/images/encyc-of-
 
 ---
 .pull-left[
-```{r, out.height=5}
-agricolae::SNK.test(anov, "Tratamiento", console = TRUE)
+```{r, out.height=5, out.width="80%"}
+library(agricolae)
+SNK.test(anov, "Tratamiento", console = TRUE)
 ```
 ]
+
+
+
 .pull-right[
-```{r}
-plot(agricolae::SNK.test(anov, "Tratamiento", console = FALSE))
+```{r, out.width="50%", fig.align='center'}
+library(agricolae)
+snk<-SNK.test(anov, "Tratamiento", console = FALSE)
+plot(snk)
 ```
 ]
 ---
@@ -491,13 +507,16 @@ El nivel de protección puede ser tabulado por varios valores, de la siguiente m
 ---
 .pull-left[
 ```{r}
-agricolae::duncan.test(anov, "Tratamiento", console = TRUE)
+library(agricolae)
+duncan.test(anov, "Tratamiento", console = TRUE)
 ```
 ]
 
 .pull-right[
-```{r}
-plot(agricolae::duncan.test(anov, "Tratamiento"))
+```{r, fig.align='center', out.width="50%"}
+library(agricolae)
+duncan<-agricolae::duncan.test(anov, "Tratamiento")
+plot(duncan)
 ```
 
 ]
@@ -569,8 +588,8 @@ data("PlantGrowth")
 - Escoge las variable de respuestas y grupos a evaluar
 - Prueba los supuestos de los estadísticos paramétricos
 - Si lo cumple y tiene más de dos niveles realiza un ANOVA y aplica los tres estadísticos post hoc hoy vistos y compara los resultados. 
-- Envía tu tarea a más tardar el 29 de marzo a las 3 pm al correo:
-barbara.cruz.s@uatx.mx, sehereirap@uatx.mx
+- Envía tu tarea a más tardar el 29 de marzo a las 3 pm en el classroom.
+
 ---
 class: inverse, center, middle
 

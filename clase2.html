@@ -4,13 +4,20 @@
     <title>Introducción a la estadística</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dra. Stephanie Hereira Pacheco" />
-    <script src="clase2_files/header-attrs-2.18/header-attrs.js"></script>
+    <script src="clase2_files/header-attrs-2.25/header-attrs.js"></script>
+    <script src="clase2_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
     <script src="clase2_files/clipboard-2.0.6/clipboard.min.js"></script>
     <link href="clase2_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
     <script src="clase2_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
     <script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"Press Ctrl+C to Copy"})</script>
-    <link href="clase2_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-    <link href="clase2_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link href="clase2_files/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+    <link href="clase2_files/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+    <link href="clase2_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="clase2_files/tile-view-0.2.6/tile-view.js"></script>
+    <link href="clase2_files/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
+    <script src="clase2_files/shareon-1.4.1/shareon.min.js"></script>
+    <link href="clase2_files/xaringanExtra-shareagain-0.2.6/shareagain.css" rel="stylesheet" />
+    <script src="clase2_files/xaringanExtra-shareagain-0.2.6/shareagain.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -20,6 +27,9 @@ class: center, middle, inverse, title-slide
 .title[
 # Introducción a la estadística
 ]
+.subtitle[
+## <img src="logo.jpg" style="width:2in" />
+]
 .author[
 ### Dra. Stephanie Hereira Pacheco
 ]
@@ -27,25 +37,53 @@ class: center, middle, inverse, title-slide
 ### CTCB, UATx
 ]
 .date[
-### 02-03-2023
+### 08-03-2024
 ]
 
 ---
 
-remotes::install_github("rstudio-education/armcompanion")
 
 
 
 
 
 
-.pull-left[
-.center-left[
-&lt;img src="https://ctbcuatx.edu.mx/wp-content/uploads/2020/07/1617710_1048843451811700_2278987052727773097_o-1920x805.jpg" width="600" height="200" /&gt;
-]]
-.pull-right[
-!["](https://upload.wikimedia.org/wikipedia/commons/a/a6/Logotipo_de_la_CONACYT.png)]
----
+<div>
+<style type="text/css">.xaringan-extra-logo {
+width: 80px;
+height: 90px;
+z-index: 0;
+background-image: url(https://www.ciisder.mx/images/logos/logo_uatx_2019.png);
+background-size: contain;
+background-repeat: no-repeat;
+position: absolute;
+top:1em;right:1em;
+}
+</style>
+<script>(function () {
+  let tries = 0
+  function addLogo () {
+    if (typeof slideshow === 'undefined') {
+      tries += 1
+      if (tries < 10) {
+        setTimeout(addLogo, 100)
+      }
+    } else {
+      document.querySelectorAll('.remark-slide-content:not(.title-slide):not(.inverse):not(.hide_logo)')
+        .forEach(function (slide) {
+          const logo = document.createElement('div')
+          logo.classList = 'xaringan-extra-logo'
+          logo.href = null
+          slide.appendChild(logo)
+        })
+    }
+  }
+  document.addEventListener('DOMContentLoaded', addLogo)
+})()</script>
+</div>
+
+
+
 
 # Contenido
 
@@ -505,7 +543,7 @@ TukeyHSD(anov, "Tratamiento", ordered = T)
 plot(TukeyHSD(anov, "Tratamiento", ordered = T))
 ```
 
-&lt;img src="clase2_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="clase2_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -516,7 +554,7 @@ hsd_agricolae&lt;-HSD.test(anov, "Tratamiento", group = TRUE)
 plot(hsd_agricolae)
 ```
 
-&lt;img src="clase2_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="clase2_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
 
 ]
 ---
@@ -540,13 +578,13 @@ $$
 q_{crítico} = \frac{\bar{x_{1}}-\bar{x_{2}}}{S_{12}}
 \end{aligned}`
 $$
-4. Encontrar el valor crítico en la tabla de valores críticos con los `\(k\)` y los grados de libertad del error. [Tabla1](https://elvers.us/stats/tables/qprobability.html), [Tabla2](https://www.statisticshowto.com/studentized-range-distribution/#qtable) <svg aria-hidden="true" role="img" viewBox="0 0 640 512" style="height:1em;width:1.25em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#103261;overflow:visible;position:relative;"><path d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/></svg>
+4. Encontrar el valor crítico en la tabla de valores críticos con los `\(k\)` y los grados de libertad del error. [Tabla1](https://elvers.us/stats/tables/qprobability.html), [Tabla2](https://www.statisticshowto.com/studentized-range-distribution/#qtable) <svg aria-hidden="true" role="img" viewBox="0 0 640 512" style="height:1em;width:1.25em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#103261;overflow:visible;position:relative;"><path d="M579.8 267.7c56.5-56.5 56.5-148 0-204.5c-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6c31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0c-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0L579.8 267.7zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5c50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5L217.7 177.2c31.5-31.5 82.5-31.5 114 0c27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z"/></svg>
   - Si las dos primeras medias no son diferentes entonces para la prueba
   - Si la dos primeras son diferentes sigue con los siguientes pares de medias desde el paso 2, para cuando no encuentres diferencias.
 5. En cada comparación de medias corrige los grados de libertad según el número de grupos comparados. 
 
 ---
-#[Newman-Keuls](https://methods.sagepub.com/reference/encyc-of-research-design/n266.xml) <svg aria-hidden="true" role="img" viewBox="0 0 640 512" style="height:1em;width:1.25em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#103261;overflow:visible;position:relative;"><path d="M172.5 131.1C228.1 75.51 320.5 75.51 376.1 131.1C426.1 181.1 433.5 260.8 392.4 318.3L391.3 319.9C381 334.2 361 337.6 346.7 327.3C332.3 317 328.9 297 339.2 282.7L340.3 281.1C363.2 249 359.6 205.1 331.7 177.2C300.3 145.8 249.2 145.8 217.7 177.2L105.5 289.5C73.99 320.1 73.99 372 105.5 403.5C133.3 431.4 177.3 435 209.3 412.1L210.9 410.1C225.3 400.7 245.3 404 255.5 418.4C265.8 432.8 262.5 452.8 248.1 463.1L246.5 464.2C188.1 505.3 110.2 498.7 60.21 448.8C3.741 392.3 3.741 300.7 60.21 244.3L172.5 131.1zM467.5 380C411 436.5 319.5 436.5 263 380C213 330 206.5 251.2 247.6 193.7L248.7 192.1C258.1 177.8 278.1 174.4 293.3 184.7C307.7 194.1 311.1 214.1 300.8 229.3L299.7 230.9C276.8 262.1 280.4 306.9 308.3 334.8C339.7 366.2 390.8 366.2 422.3 334.8L534.5 222.5C566 191 566 139.1 534.5 108.5C506.7 80.63 462.7 76.99 430.7 99.9L429.1 101C414.7 111.3 394.7 107.1 384.5 93.58C374.2 79.2 377.5 59.21 391.9 48.94L393.5 47.82C451 6.731 529.8 13.25 579.8 63.24C636.3 119.7 636.3 211.3 579.8 267.7L467.5 380z"/></svg>
+#[Newman-Keuls](https://methods.sagepub.com/reference/encyc-of-research-design/n266.xml) <svg aria-hidden="true" role="img" viewBox="0 0 640 512" style="height:1em;width:1.25em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#103261;overflow:visible;position:relative;"><path d="M579.8 267.7c56.5-56.5 56.5-148 0-204.5c-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6c31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0c-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0L579.8 267.7zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5c50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5L217.7 177.2c31.5-31.5 82.5-31.5 114 0c27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z"/></svg>
 
 .pull-left[
 &lt;img src="https://pltfrmrsrcscdn.sagepub.com/srm/images/encyc-of-research-design/p900-1.jpg" style="display: block; margin: auto;" /&gt;
@@ -564,7 +602,8 @@ $$
 .pull-left[
 
 ```r
-agricolae::SNK.test(anov, "Tratamiento", console = TRUE)
+library(agricolae)
+SNK.test(anov, "Tratamiento", console = TRUE)
 ```
 
 ```
@@ -574,15 +613,15 @@ agricolae::SNK.test(anov, "Tratamiento", console = TRUE)
 ## Student Newman Keuls Test
 ## for Valor 
 ## 
-## Mean Square Error:  3.676392 
+## Mean Square Error:  3.676393 
 ## 
 ## Tratamiento,  means
 ## 
-##               Valor      std r   Min   Max
-## Tratamiento1 -1.042 1.368912 5 -3.10  0.18
-## Tratamiento2  5.650 1.955479 5  3.06  7.88
-## Tratamiento3  4.768 2.627845 5  0.12  6.56
-## Tratamiento4  8.916 1.449890 5  7.31 11.21
+##               Valor      std r        se   Min   Max   Q25   Q50  Q75
+## Tratamiento1 -1.042 1.368912 5 0.8574838 -3.10  0.18 -1.66 -0.72 0.09
+## Tratamiento2  5.650 1.955479 5 0.8574838  3.06  7.88  4.74  5.29 7.28
+## Tratamiento3  4.768 2.627845 5 0.8574838  0.12  6.56  5.51  5.72 5.93
+## Tratamiento4  8.916 1.449890 5 0.8574838  7.31 11.21  8.18  8.83 9.05
 ## 
 ## Alpha: 0.05 ; DF Error: 16 
 ## 
@@ -599,13 +638,18 @@ agricolae::SNK.test(anov, "Tratamiento", console = TRUE)
 ## Tratamiento1 -1.042      c
 ```
 ]
+
+
+
 .pull-right[
 
 ```r
-plot(agricolae::SNK.test(anov, "Tratamiento", console = FALSE))
+library(agricolae)
+snk&lt;-SNK.test(anov, "Tratamiento", console = FALSE)
+plot(snk)
 ```
 
-![](clase2_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+&lt;img src="clase2_files/figure-html/unnamed-chunk-26-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 ]
 ---
 ## Tukey-HSD vs Newman-Keuls
@@ -668,7 +712,8 @@ El nivel de protección puede ser tabulado por varios valores, de la siguiente m
 .pull-left[
 
 ```r
-agricolae::duncan.test(anov, "Tratamiento", console = TRUE)
+library(agricolae)
+duncan.test(anov, "Tratamiento", console = TRUE)
 ```
 
 ```
@@ -678,15 +723,15 @@ agricolae::duncan.test(anov, "Tratamiento", console = TRUE)
 ## Duncan's new multiple range test
 ## for Valor 
 ## 
-## Mean Square Error:  3.676392 
+## Mean Square Error:  3.676393 
 ## 
 ## Tratamiento,  means
 ## 
-##               Valor      std r   Min   Max
-## Tratamiento1 -1.042 1.368912 5 -3.10  0.18
-## Tratamiento2  5.650 1.955479 5  3.06  7.88
-## Tratamiento3  4.768 2.627845 5  0.12  6.56
-## Tratamiento4  8.916 1.449890 5  7.31 11.21
+##               Valor      std r        se   Min   Max   Q25   Q50  Q75
+## Tratamiento1 -1.042 1.368912 5 0.8574838 -3.10  0.18 -1.66 -0.72 0.09
+## Tratamiento2  5.650 1.955479 5 0.8574838  3.06  7.88  4.74  5.29 7.28
+## Tratamiento3  4.768 2.627845 5 0.8574838  0.12  6.56  5.51  5.72 5.93
+## Tratamiento4  8.916 1.449890 5 0.8574838  7.31 11.21  8.18  8.83 9.05
 ## 
 ## Alpha: 0.05 ; DF Error: 16 
 ## 
@@ -707,10 +752,12 @@ agricolae::duncan.test(anov, "Tratamiento", console = TRUE)
 .pull-right[
 
 ```r
-plot(agricolae::duncan.test(anov, "Tratamiento"))
+library(agricolae)
+duncan&lt;-agricolae::duncan.test(anov, "Tratamiento")
+plot(duncan)
 ```
 
-![](clase2_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+&lt;img src="clase2_files/figure-html/unnamed-chunk-28-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 ]
 ---
@@ -782,8 +829,8 @@ data("PlantGrowth")
 - Escoge las variable de respuestas y grupos a evaluar
 - Prueba los supuestos de los estadísticos paramétricos
 - Si lo cumple y tiene más de dos niveles realiza un ANOVA y aplica los tres estadísticos post hoc hoy vistos y compara los resultados. 
-- Envía tu tarea a más tardar el 29 de marzo a las 3 pm al correo:
-barbara.cruz.s@uatx.mx, sehereirap@uatx.mx
+- Envía tu tarea a más tardar el 29 de marzo a las 3 pm en el classroom.
+
 ---
 class: inverse, center, middle
 

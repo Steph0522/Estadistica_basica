@@ -39,7 +39,7 @@ class: center, middle, inverse, title-slide
 ### CTCB, UATx
 ]
 .date[
-### 01-03-2024
+### 06-03-2024
 ]
 
 ---
@@ -789,17 +789,17 @@ las que se desconoce si es válido suponer la normalidad de los datos, conviene 
 - Pocos supuestos: aleatoriedad e independencia.
 
 ---
-# PRUEBAS PARAMÉTRICAS
+# PRUEBAS NO PARAMÉTRICAS
 
 
 |VENTAJAS    | DESVENTAJAS     | 
 |-------------------|-------|
 | - Mayor aplicabilidad | - Eficiencia estadística menor
-| - Se pueden usar vaiables ordinales     |- Poder estadísitico menor   | 
+| - Se pueden usar variables ordinales     |- Poder estadísitico menor   | 
 | - Son más fáciles de calcular     | - No se pueden evaluar interacciones| 
 
 ---
-# PRUEBAS PARAMÉTRICAS
+# PRUEBAS NO PARAMÉTRICAS
 
 
 |TIPO    |   PRUEBA     | 
@@ -928,8 +928,8 @@ diferencia.
 ```r
 data_w&lt;- data.frame(Observ=c(1:11),
                     Antes=c(1,8,0,0,1,3,3,3,5,6,5),
-                    Después=c(3,5,-2,-1,1,-5,-7,-362,-1,0,-10))
-data_w$Diferencia&lt;- data_w$Antes-data_w$Después
+                    Despues=c(3,5,-2,-1,1,-5,-7,-362,-1,0,-10))
+data_w$Diferencia&lt;- data_w$Antes-data_w$Despues
 ```
 ]
 .pull-right[
@@ -938,7 +938,7 @@ data_w$Diferencia&lt;- data_w$Antes-data_w$Después
   &lt;tr&gt;
    &lt;th style="text-align:center;"&gt; Observ &lt;/th&gt;
    &lt;th style="text-align:center;"&gt; Antes &lt;/th&gt;
-   &lt;th style="text-align:center;"&gt; Después &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Despues &lt;/th&gt;
    &lt;th style="text-align:center;"&gt; Diferencia &lt;/th&gt;
   &lt;/tr&gt;
  &lt;/thead&gt;
@@ -1021,7 +1021,7 @@ data_w$Diferencia&lt;- data_w$Antes-data_w$Después
   &lt;tr&gt;
    &lt;th style="text-align:center;"&gt; Observ &lt;/th&gt;
    &lt;th style="text-align:center;"&gt; Antes &lt;/th&gt;
-   &lt;th style="text-align:center;"&gt; Después &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Despues &lt;/th&gt;
    &lt;th style="text-align:center;"&gt; Diferencia &lt;/th&gt;
   &lt;/tr&gt;
  &lt;/thead&gt;
@@ -1101,7 +1101,7 @@ data_w$Diferencia&lt;- data_w$Antes-data_w$Después
   &lt;tr&gt;
    &lt;th style="text-align:center;"&gt; Observ &lt;/th&gt;
    &lt;th style="text-align:center;"&gt; Antes &lt;/th&gt;
-   &lt;th style="text-align:center;"&gt; Después &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Despues &lt;/th&gt;
    &lt;th style="text-align:center;"&gt; Diferencia &lt;/th&gt;
    &lt;th style="text-align:center;"&gt; Rango &lt;/th&gt;
   &lt;/tr&gt;
@@ -1195,7 +1195,7 @@ data_w$Diferencia&lt;- data_w$Antes-data_w$Después
   &lt;tr&gt;
    &lt;th style="text-align:center;"&gt; Observ &lt;/th&gt;
    &lt;th style="text-align:center;"&gt; Antes &lt;/th&gt;
-   &lt;th style="text-align:center;"&gt; Después &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Despues &lt;/th&gt;
    &lt;th style="text-align:center;"&gt; Diferencia &lt;/th&gt;
    &lt;th style="text-align:center;"&gt; Rango &lt;/th&gt;
    &lt;th style="text-align:center;"&gt; Signo &lt;/th&gt;
@@ -1338,14 +1338,14 @@ Two_tailed_W
 En R
 
 ```r
-wilcox.test(data_w$Antes, data_w$Después, paired = TRUE)
+wilcox.test(data_w$Antes, data_w$Despues, paired = TRUE)
 ```
 
 ```
 ## 
 ## 	Wilcoxon signed rank test with continuity correction
 ## 
-## data:  data_w$Antes and data_w$Después
+## data:  data_w$Antes and data_w$Despues
 ## V = 52.5, p-value = 0.0124
 ## alternative hypothesis: true location shift is not equal to 0
 ```
