@@ -160,7 +160,7 @@ siendo `\(k\)` los niveles, `\(N-k\)` y `\(k - 1\)` los grados de libertad y `\(
 |:--------:|:---------------:|:----------------:||:--------------:||:-:|
 |Entre Grupos|SCT|k-1|SCT/k-1|F=CMT/CME|
 |Dentro de los grupos o Error|SCE|N-k|SCE/N-k|
-|Total|SCT|N-1|
+|Total|STT|N-1|
 
 ---
 # Ejemplo aplicado
@@ -186,10 +186,10 @@ datos&lt;- data.frame(Tratamiento1=c(-3.10,0.18,-0.72,0.09,-1.66),
 
 
 ```r
-ro1&lt;- datos$Tratamiento1-mean(datos$Tratamiento1)
-ro2&lt;- datos$Tratamiento2-mean(datos$Tratamiento1)
-ro3&lt;- datos$Tratamiento3-mean(datos$Tratamiento1)
-ro4&lt;- datos$Tratamiento4-mean(datos$Tratamiento1)
+ro1&lt;- datos$Tratamiento1-mean(as.matrix(datos))
+ro2&lt;- datos$Tratamiento2-mean(as.matrix(datos))
+ro3&lt;- datos$Tratamiento3-mean(as.matrix(datos))
+ro4&lt;- datos$Tratamiento4-mean(as.matrix(datos))
 
 
 shapiro.test(c(ro1,ro2, ro3, ro4))
@@ -221,6 +221,7 @@ lmtest::bptest(lm(Valor~Tratamiento, data = datost))
 ## BP = 2.3472, df = 3, p-value = 0.5035
 ```
 ]
+
 
 ---
 ### Calculemos los grados de libertad
@@ -358,7 +359,7 @@ valor_F;valor_p
 ---
 ## Pruebas de comparaciones múltiples para ANOVA
 
-&lt;uw-blockquote&gt; *post hoc* viene del latín y sginifica **para después de esto**. Las pruebas *post hoc* se realizan después de que se ha establecido un efecto significativo de un factor para obtener más información sobre la naturaleza de un efecto, es decir, ¿qué niveles del factor están asociados con puntajes más altos o más bajos?
+&lt;uw-blockquote&gt; *post hoc* viene del latín y significa **para después de esto**. Las pruebas *post hoc* se realizan después de que se ha establecido un efecto significativo de un factor para obtener más información sobre la naturaleza de un efecto, es decir, ¿qué niveles del factor están asociados con puntajes más altos o más bajos?
 
 &lt;uw-blockquote&gt; Las pruebas *post hoc* pueden ayudar a contar la historia de los datos más allá de una simple diferencia.
 ---
@@ -656,7 +657,7 @@ plot(snk)
 
 - Aunque el punto importante de las pruebas *post hoc* es disminuir los errores tipo I, en algunos casos Newman-Keuls con más de 4 grupos incrementa ligeramente este tipo de error en mayor medida que Tukey-HSD.
 
-- Newman-Keuls trabaja de forma secuencial por lo que por esta razón no puede producor intervalos de confianza al 95% para cada diferencia ni valores de p justados como lo hace Tukey-HSD.
+- Newman-Keuls trabaja de forma secuencial por lo que por esta razón no puede producir intervalos de confianza al 95% para cada diferencia ni valores de p justados como lo hace Tukey-HSD.
 
 - Newman-Keuls es más conservadora que Tukey-HSD por su umbral móvil y el valor de alfa o significancia es el mismo del ANOVA (0.05).
 
@@ -674,7 +675,7 @@ plot(snk)
 
 
 ---
-### Prueba de Duncan
+#### Prueba de Duncan
 1. Ordenar las medias de la más grande a la más pequeña.
 2. Cacular el valor crítico *q*, aquí denominad como `\(r\)`, como las pruebas anteriores
 3. Encontrar el valor crítico en la tabla de valores críticos con los `\(k\)` y los grados de libertad del error. 
@@ -688,7 +689,8 @@ $$
 - Este `\(r\)` (antes `\(q_{crítico}\)`) es variable como anteriormente vimos en la prueba de Newman-Keuls y las diferencias de los promedios:
   - Si las dos primeras medias no son diferentes entonces para la prueba
   - Si la dos primeras son diferentes sigue con los siguientes pares de medias desde el paso 2, para cuando no encuentres diferencias.
-5. En cada comparación de medias corrige los grados de libertad según el número de grupos comparados.
+  - En cada comparación de medias corrige los grados de libertad por comparaciones
+
 ---
 ### Prueba de Duncan
 Además de estos pasos que lucen muy parecidos a la prueba de Newman-Keuls este método introduce además una significancia o `\(\alpha\)` variable, esto como un **"nivel de protección"** basado en los grados de libertad y viene dada por la fórmula:
@@ -818,7 +820,7 @@ data("PlantGrowth")
 
 - [Post-Hoc Analysis with Tukey’s Test](https://rstudio-pubs-static.s3.amazonaws.com/181709_eec7a5bc24c04b8badeb297c4807109a.html)
 
-- [ANOVA](https://www.cienciadedatos.net/documentos/19_anova.html#Dunnett%E2%80%99s_correction_(Dunnett%E2%80%99s_test))
+- [ANOVA](https://www.cienciadedatos.net/documentos/19_anova.html#Dunnett%E2%80%99s_correction_(Dunnett%E2%80%99s_test)
 
 - [Post-Hocs tests](https://www.statisticshowto.com/probability-and-statistics/statistics-definitions/post-hoc/)
 
